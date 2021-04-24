@@ -1,9 +1,12 @@
 require 'app/game.rb'
 
-$game
+$game = nil
 
 def tick(args)
-  $game ||= Game.new
+  if $game == nil then
+    $game = Game.new
+    puts "New game created"
+  end
   $game.state = args.state
   $game.inputs = args.inputs
   $game.outputs = args.outputs

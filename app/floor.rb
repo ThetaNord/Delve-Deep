@@ -2,7 +2,6 @@ require 'app/tile.rb'
 
 class Floor
 
-  attr_accessor :floor_number
   attr_reader :map,:width, :height
 
   def initialize
@@ -14,8 +13,8 @@ class Floor
     @width = w
     @height = h
     # Generate a float "height map" to aid in map generation
-    step = 8
-    max_diff = 0.5*step
+    step = 64
+    max_diff = 0.125*step
     x_size = step + 1
     y_size = step + 1
     float_map = Array.new(x_size) {|x| x = Array.new(y_size) { |y| y = 0 }}
@@ -28,7 +27,6 @@ class Floor
     while step > 1 do
       step /= 2
       max_diff /= 2.0
-      puts "Step: " + step.to_s + ", Max diff: " + max_diff.to_s
       # Square step, horizontal
       i = step
       while i < x_size do
@@ -69,7 +67,7 @@ class Floor
         i += 2*step
       end
     end
-    puts float_map
+    #puts float_map
     # Convert the float map to desired size tile map
     @map = Array.new
     x_ratio = (x_size-1)/(@width-1.0)

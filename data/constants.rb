@@ -4,9 +4,9 @@ TILE_SPRITES_PATH = 'sprites/tiles.png'
 # Terrain types should be in order of ascending threshold
 TERRAIN_TYPES = [:empty, :dirt, :stone, :bedrock]
 TERRAIN_TYPE_THRESHOLDS = {
-    "empty": 0.2,
-    "dirt": 0.6,
-    "stone": 0.9,
+    "empty": 0.12,
+    "dirt": 0.55,
+    "stone": 0.96,
     "bedrock": 1.0,
 }
 TERRAIN_SPRITE_INDICES = {

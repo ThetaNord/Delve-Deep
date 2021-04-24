@@ -8,7 +8,7 @@ class Game
 
   def initialize
     @screen = "title"
-    @scale = 3
+    @scale = 2
   end
 
   def tick
@@ -17,9 +17,14 @@ class Game
   end
 
   def process_inputs
-    if inputs.mouse.click && @screen = "title"
-      @screen = "dungeon"
-      @dungeon = Dungeon.new
+    if inputs.mouse.click then
+      if @screen == "title" then
+        @screen = "dungeon"
+        @dungeon = Dungeon.new
+        puts "New dungeon created"
+      elsif @screen == "dungeon" then
+        @dungeon.next_floor
+      end
     end
   end
 
@@ -27,7 +32,7 @@ class Game
     case @screen
     when "title"
       draw_title
-  when "dungeon"
+    when "dungeon"
       draw_dungeon
     end
   end
@@ -41,8 +46,8 @@ class Game
 
   def draw_dungeon
     floor = @dungeon.current_floor
-    floor_name = (floor.floor_number+1).to_s
-    outputs.labels << [640, 700, 'Floor ' + floor_name, 10, 1]
+    floor_name = "Floor " + (@dungeon.floor_number+1).to_s
+    outputs.labels << [640, 700, floor_name, 10, 1]
     for i in 0..floor.width-1 do
       for j in 0..floor.height-1 do
         outputs.sprites << floor.map[i][j].get_terrain_tile(300+i*16*@scale, 100+j*16*@scale, @scale)
