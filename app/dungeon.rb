@@ -1,4 +1,5 @@
 require 'app/floor.rb'
+require 'app/character.rb'
 
 class Dungeon
 
@@ -8,6 +9,17 @@ class Dungeon
     @floors = Array.new
     @floor_number = -1
     next_floor
+    character = Character.new
+    character.is_player = true
+    current_floor.add_character(character)
+  end
+
+  def get_player_position
+    current_floor.characters.each do |char|
+      if char.is_player then
+        return [char.x, char.y]
+      end
+    end
   end
 
   def next_floor
@@ -16,7 +28,7 @@ class Dungeon
     @floors << floor
     puts "Total floors: " + @floors.length.to_s
     @floor_number += 1
-    puts "Current floor: " + @floor_number.to_s
+    puts "Current floor: " + (@floor_number+1).to_s
   end
 
   def current_floor

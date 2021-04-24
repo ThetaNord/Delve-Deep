@@ -2,10 +2,22 @@ require 'app/tile.rb'
 
 class Floor
 
-  attr_reader :map,:width, :height
+  attr_reader :map, :width, :height, :characters
 
   def initialize
     @map = Array.new
+    @characters = Array.new
+  end
+
+  def add_character(character)
+    character.x = 0
+    character.y = 0
+    character.floor = self
+    @characters << character
+  end
+
+  def get_tiles
+    return map.flatten
   end
 
   def generate_floor_map(w, h)
@@ -76,6 +88,8 @@ class Floor
       @map << Array.new
       for j in 0...@height do
         tile = Tile.new
+        tile.x = i
+        tile.y = j
         x = (i*x_ratio).floor
         y = (j*y_ratio).floor
         tile.set_terrain_value(float_map[x][y])

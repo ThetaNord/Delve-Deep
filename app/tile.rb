@@ -2,6 +2,7 @@ require 'data/constants.rb'
 
 class Tile
 
+  attr_accessor :x, :y
   attr_reader :terrain
 
   def set_terrain_value(val)
@@ -13,8 +14,12 @@ class Tile
     end
   end
 
+  def sprite_index
+    TERRAIN_SPRITE_INDICES[@terrain]
+  end
+
   def get_terrain_tile(x, y, scale)
-    idx = TERRAIN_SPRITE_INDICES[terrain]
+    idx = TERRAIN_SPRITE_INDICES[@terrain]
     [
       {
         x: x-8*scale,
@@ -31,20 +36,19 @@ class Tile
   end
 
   def serialize
-    { "terrain": @terrain }
+    { "x": @x, "y": @y, "terrain": @terrain }
   end
 
   def inspect
     serialize.to_s
   end
 
-  def to_s
-    serialize.to_s
-  end
-
-
   #def to_s
-  #  return @terrain
+  #  serialize.to_s
   #end
+
+  def to_s
+    return @terrain
+  end
 
 end
