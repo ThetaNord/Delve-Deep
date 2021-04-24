@@ -21,9 +21,19 @@ class Game
       if @screen == "title" then
         @screen = "dungeon"
         @dungeon = Dungeon.new
+        state.player = dungeon.get_player
         puts "New dungeon created"
       elsif @screen == "dungeon" then
         @dungeon.next_floor
+      end
+    end
+    if @screen == "dungeon" then
+      x_diff = inputs.keyboard.left_right
+      y_diff = inputs.keyboard.up_down
+      if x_diff != 0 then
+        state.player.x += x_diff
+      elsif y_diff != 0 then
+        state.player.y += y_diff
       end
     end
   end

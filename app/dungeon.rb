@@ -14,12 +14,17 @@ class Dungeon
     current_floor.add_character(character)
   end
 
-  def get_player_position
+  def get_player
     current_floor.characters.each do |char|
       if char.is_player then
-        return [char.x, char.y]
+        return char
       end
     end
+  end
+
+  def get_player_position
+    char = get_player
+    return [char.x, char.y]
   end
 
   def next_floor
