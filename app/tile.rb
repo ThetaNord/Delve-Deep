@@ -6,15 +6,15 @@ class Tile
 
   def set_terrain_value(val)
     for ter in TERRAIN_TYPES do
-      if val < TERRAIN_TYPE_THRESHOLDS[:ter] then
-        terrain = ter
+      if val <= TERRAIN_TYPE_THRESHOLDS[ter] then
+        @terrain = ter
         return
       end
     end
   end
 
-  def get_terrain_tile(scale, x, y)
-    idx = TERRAIN_SPRITE_INDICES[:terrain]
+  def get_terrain_tile(x, y, scale)
+    idx = TERRAIN_SPRITE_INDICES[terrain]
     [
       {
         x: x-8*scale,
@@ -28,5 +28,23 @@ class Tile
         tile_h: 16
       }
     ]
+  end
+
+  def serialize
+    { "terrain": @terrain }
+  end
+
+  def inspect
+    serialize.to_s
+  end
+
+  def to_s
+    serialize.to_s
+  end
+
+
+  #def to_s
+  #  return @terrain
+  #end
 
 end

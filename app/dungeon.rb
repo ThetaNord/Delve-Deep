@@ -8,7 +8,7 @@ class Dungeon
     @floors = Array.new(1)
     @current_floor = Floor.new
     @current_floor.floor_number = 0
-    @current_floor.generate(5, 5)
+    @current_floor.generate(10, 5)
     @floors[0] = @current_floor
   end
 

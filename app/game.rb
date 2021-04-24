@@ -4,10 +4,11 @@ require 'data/constants.rb'
 class Game
 
   attr_accessor :state, :inputs, :outputs, :grid
-  attr_reader :screen, :dungeon
+  attr_reader :screen, :dungeon, :scale
 
   def initialize
     @screen = "title"
+    @scale = 3
   end
 
   def tick
@@ -17,7 +18,7 @@ class Game
 
   def process_inputs
     if inputs.mouse.click && @screen = "title"
-      @screen = "game"
+      @screen = "dungeon"
       @dungeon = Dungeon.new
     end
   end
@@ -26,8 +27,8 @@ class Game
     case @screen
     when "title"
       draw_title
-    when "game"
-      draw_game
+  when "dungeon"
+      draw_dungeon
     end
   end
 
@@ -38,13 +39,15 @@ class Game
     outputs.sprites << get_character_sprite(0, 20, x_mid, y_mid)
   end
 
-  def draw_game
+  def draw_dungeon
     floor = @dungeon.current_floor
     floor_name = (floor.floor_number+1).to_s
     outputs.labels << [640, 700, 'Floor ' + floor_name, 10, 1]
-    x_mid = ((grid.left + grid.right)/2).floor
-    y_mid = ((grid.top + grid.bottom)/2).floor
-    outputs.sprites << get_character_sprite(0, 5, x_mid, y_mid)
+    for i in 0..floor.width-1 do
+      for j in 0..floor.height-1 do
+        outputs.sprites << floor.map[i][j].get_terrain_tile(300+i*16*@scale, 100+j*16*@scale, @scale)
+      end
+    end
   end
 
   def get_character_sprite(idx, scale, x, y)
