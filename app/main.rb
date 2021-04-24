@@ -5,6 +5,7 @@ $game = nil
 def tick(args)
   if $game == nil then
     $game = Game.new
+    args.state.axes_released = true
     puts "New game created"
   end
   $game.state = args.state

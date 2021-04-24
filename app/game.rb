@@ -30,10 +30,17 @@ class Game
     if @screen == "dungeon" then
       x_diff = inputs.keyboard.left_right
       y_diff = inputs.keyboard.up_down
-      if x_diff != 0 then
-        state.player.x += x_diff
-      elsif y_diff != 0 then
-        state.player.y += y_diff
+      if x_diff != 0 || y_diff != 0 then
+        if state.axes_released == true then
+          if x_diff != 0 then
+            state.player.x += x_diff
+          elsif y_diff != 0 then
+            state.player.y += y_diff
+          end
+          state.axes_released = false
+        end
+      elsif !state.axes_released
+        state.axes_released = true
       end
     end
   end
