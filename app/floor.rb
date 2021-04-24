@@ -3,7 +3,8 @@ require 'app/stairs.rb'
 
 class Floor
 
-  attr_reader :map, :width, :height, :characters, :objects
+  attr_reader :map, :width, :height, :characters
+  attr_reader :objects, :stairs_down, :stairs_up
 
   def initialize
     @map = Array.new
@@ -12,10 +13,15 @@ class Floor
   end
 
   def add_character(character)
-    character.x = 0
-    character.y = 0
     character.floor = self
     @characters << character
+  end
+
+  def remove_character(character)
+    @characters.delete(character)
+    if character.floor == self then
+      character.floor = nil
+    end
   end
 
   def get_tiles
@@ -112,30 +118,30 @@ class Floor
 
   def add_stairs
     # Stairs down
-    stairs_down = Stairs.new
-    stairs_down.direction = "down"
-    stair_x = (rand * @width).round
-    stair_y = (rand * @height).round
+    @stairs_down = Stairs.new
+    @stairs_down.direction = "down"
+    stair_x = (rand * @width).floor
+    stair_y = (rand * @height).floor
     while square_has_object(stair_x, stair_y) do
-      stair_x = (rand * @width).round
-      stair_y = (rand * @height).round
+      stair_x = (rand * @width).floor
+      stair_y = (rand * @height).floor
     end
-    stairs_down.x = stair_x
-    stairs_down.y = stair_y
+    @stairs_down.x = stair_x
+    @stairs_down.y = stair_y
     @objects << stairs_down
     # Stairs up
-    stairs_up = Stairs.new
-    stairs_up.direction = "up"
-    stair_x = (rand * @width).round
-    stair_y = (rand * @height).round
+    @stairs_up = Stairs.new
+    @stairs_up.direction = "up"
+    stair_x = (rand * @width).floor
+    stair_y = (rand * @height).floor
     # Check that the square is free and far enough from the stairs leading down
-    while square_has_object(stair_x, stair_y) || ((stairs_down.x - stair_x).abs <= 5 && (stairs_down.y - stair_y).abs <= 5) do
-      stair_x = (rand * @width).round
-      stair_y = (rand * @height).round
+    while square_has_object(stair_x, stair_y) || ((@stairs_down.x - stair_x).abs <= 5 && (@stairs_down.y - stair_y).abs <= 5) do
+      stair_x = (rand * @width).floor
+      stair_y = (rand * @height).floor
     end
-    stairs_up.x = stair_x
-    stairs_up.y = stair_y
-    @objects << stairs_up
+    @stairs_up.x = stair_x
+    @stairs_up.y = stair_y
+    @objects << @stairs_up
   end
 
 end

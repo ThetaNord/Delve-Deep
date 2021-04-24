@@ -4,7 +4,7 @@ require 'data/constants.rb'
 class Game
 
   attr_accessor :state, :inputs, :outputs, :grid
-  attr_reader :screen, :dungeon, :scale, :x_mid, :y_mid, :map_origin
+  attr_reader :screen, :scale, :x_mid, :y_mid, :map_origin
 
   def initialize
     @screen = "title"
@@ -20,14 +20,24 @@ class Game
     if inputs.mouse.click then
       if @screen == "title" then
         @screen = "dungeon"
-        @dungeon = Dungeon.new
-        state.player = dungeon.get_player
+        state.dungeon = Dungeon.new
+        state.player = state.dungeon.get_player
+        state.floor = state.dungeon.current_floor
         puts "New dungeon created"
       elsif @screen == "dungeon" then
-        @dungeon.next_floor
+        state.dungeon.next_floor
       end
     end
     if @screen == "dungeon" then
+      # Check for level transition
+      if state.floor.stairs_down.x == state.player.x && state.floor.stairs_down.y == state.player.y then
+        state.floor.remove_character(state.player)
+        state.floor = state.dungeon.next_floor
+        state.player.x = state.floor.stairs_up.x
+        state.player.y = state.floor.stairs_up.y
+        state.floor.add_character(state.player)
+      end
+      # Check for directional input
       x_diff = inputs.keyboard.left_right
       y_diff = inputs.keyboard.up_down
       if x_diff != 0 || y_diff != 0 then
@@ -52,7 +62,7 @@ class Game
     when "title"
       draw_title
     when "dungeon"
-      @map_origin = @dungeon.get_player_position
+      @map_origin = state.dungeon.get_player_position
       draw_dungeon
     end
   end
@@ -63,21 +73,20 @@ class Game
   end
 
   def draw_dungeon
-    floor = @dungeon.current_floor
-    floor_name = "Floor " + (@dungeon.floor_number+1).to_s
+    floor_name = "Floor " + (state.dungeon.floor_number+1).to_s
     outputs.labels << [640, 700, floor_name, 10, 1]
     # Render tiles
-    tiles = floor.get_tiles
+    tiles = state.floor.get_tiles
     outputs.sprites << tiles.map do |tile|
       terrain_tile_in_game(tile.x, tile.y, tile.sprite_index)
     end
     # Render objects
-    objects = floor.objects
+    objects = state.floor.objects
     outputs.sprites << objects.map do |object|
       object_tile_in_game(object.x, object.y, object.sprite_index)
     end
     # Render characters
-    characters = floor.characters
+    characters = state.floor.characters
     characters.each do |character|
       outputs.sprites << character_tile_in_game(character.x, character.y, character.sprite_index)
     end

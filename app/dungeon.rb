@@ -34,6 +34,7 @@ class Dungeon
     puts "Total floors: " + @floors.length.to_s
     @floor_number += 1
     puts "Current floor: " + (@floor_number+1).to_s
+    return current_floor
   end
 
   def current_floor
