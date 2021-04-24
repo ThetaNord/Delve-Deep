@@ -1,12 +1,14 @@
 require 'app/tile.rb'
+require 'app/stairs.rb'
 
 class Floor
 
-  attr_reader :map, :width, :height, :characters
+  attr_reader :map, :width, :height, :characters, :objects
 
   def initialize
     @map = Array.new
     @characters = Array.new
+    @objects = Array.new
   end
 
   def add_character(character)
@@ -96,6 +98,44 @@ class Floor
         @map[i] << tile
       end
     end
+    add_stairs
+  end
+
+  def square_has_object(x, y)
+    @objects.each do |object|
+      if object.x == x && object.y == y then
+        return true
+      end
+    end
+    return false
+  end
+
+  def add_stairs
+    # Stairs down
+    stairs_down = Stairs.new
+    stairs_down.direction = "down"
+    stair_x = (rand * @width).round
+    stair_y = (rand * @height).round
+    while square_has_object(stair_x, stair_y) do
+      stair_x = (rand * @width).round
+      stair_y = (rand * @height).round
+    end
+    stairs_down.x = stair_x
+    stairs_down.y = stair_y
+    @objects << stairs_down
+    # Stairs up
+    stairs_up = Stairs.new
+    stairs_up.direction = "up"
+    stair_x = (rand * @width).round
+    stair_y = (rand * @height).round
+    # Check that the square is free and far enough from the stairs leading down
+    while square_has_object(stair_x, stair_y) || ((stairs_down.x - stair_x).abs <= 5 && (stairs_down.y - stair_y).abs <= 5) do
+      stair_x = (rand * @width).round
+      stair_y = (rand * @height).round
+    end
+    stairs_up.x = stair_x
+    stairs_up.y = stair_y
+    @objects << stairs_up
   end
 
 end

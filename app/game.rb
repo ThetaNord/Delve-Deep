@@ -66,10 +66,17 @@ class Game
     floor = @dungeon.current_floor
     floor_name = "Floor " + (@dungeon.floor_number+1).to_s
     outputs.labels << [640, 700, floor_name, 10, 1]
+    # Render tiles
     tiles = floor.get_tiles
     outputs.sprites << tiles.map do |tile|
       terrain_tile_in_game(tile.x, tile.y, tile.sprite_index)
     end
+    # Render objects
+    objects = floor.objects
+    outputs.sprites << objects.map do |object|
+      object_tile_in_game(object.x, object.y, object.sprite_index)
+    end
+    # Render characters
     characters = floor.characters
     characters.each do |character|
       outputs.sprites << character_tile_in_game(character.x, character.y, character.sprite_index)
@@ -97,6 +104,20 @@ class Game
       w: 16*@scale,
       h: 16*@scale,
       path: TILE_SPRITES_PATH,
+      tile_x: (sprite_index % 4) * 16,
+      tile_y: (sprite_index / 4).floor * 16,
+      tile_w: 16,
+      tile_h: 16,
+    }
+  end
+
+  def object_tile_in_game(x, y, sprite_index)
+    {
+      x: @x_mid + (x - @map_origin[0])*16*@scale - 8*@scale,
+      y: @y_mid + (y - @map_origin[1])*16*@scale - 8*@scale,
+      w: 16*@scale,
+      h: 16*@scale,
+      path: OBJECT_SPRITES_PATH,
       tile_x: (sprite_index % 4) * 16,
       tile_y: (sprite_index / 4).floor * 16,
       tile_w: 16,

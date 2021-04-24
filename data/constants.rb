@@ -1,5 +1,6 @@
 CHARACTER_SPRITES_PATH = 'sprites/characters.png'
 TILE_SPRITES_PATH = 'sprites/tiles.png'
+OBJECT_SPRITES_PATH = 'sprites/objects.png'
 
 # Terrain types should be in order of ascending threshold
 TERRAIN_TYPES = [:empty, :dirt, :stone, :bedrock]
