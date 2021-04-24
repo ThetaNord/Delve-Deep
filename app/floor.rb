@@ -28,6 +28,14 @@ class Floor
     return map.flatten
   end
 
+  def get_tile(x, y)
+    get_tiles.each do |tile|
+      if tile.x == x && tile.y == y then
+        return tile
+      end
+    end
+  end
+
   def generate_floor_map(w, h)
     # Set map width and height
     @width = w
@@ -107,13 +115,28 @@ class Floor
     add_stairs
   end
 
-  def square_has_object(x, y)
+  def get_object(x, y)
     @objects.each do |object|
       if object.x == x && object.y == y then
-        return true
+        return object
       end
     end
-    return false
+    return nil
+  end
+
+  def square_has_object(x, y)
+    return get_object(x, y) != nil
+  end
+
+  def tile_is_empty(x, y)
+    if square_has_object(x, y) then
+      return false
+    end
+    tile = get_tile(x,y)
+    if !tile.terrain == :empty then
+      return false
+    end
+    return true
   end
 
   def add_stairs
@@ -125,6 +148,10 @@ class Floor
     while square_has_object(stair_x, stair_y) do
       stair_x = (rand * @width).floor
       stair_y = (rand * @height).floor
+    end
+    tile = get_tile(stair_x, stair_y)
+    if tile.terrain != :empty then
+      tile.set_terrain(:empty)
     end
     @stairs_down.x = stair_x
     @stairs_down.y = stair_y
@@ -138,6 +165,10 @@ class Floor
     while square_has_object(stair_x, stair_y) || ((@stairs_down.x - stair_x).abs <= 5 && (@stairs_down.y - stair_y).abs <= 5) do
       stair_x = (rand * @width).floor
       stair_y = (rand * @height).floor
+    end
+    tile = get_tile(stair_x, stair_y)
+    if tile.terrain != "empty" then
+      tile.set_terrain(:empty)
     end
     @stairs_up.x = stair_x
     @stairs_up.y = stair_y

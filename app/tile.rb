@@ -3,13 +3,33 @@ require 'data/constants.rb'
 class Tile
 
   attr_accessor :x, :y
-  attr_reader :terrain
+  attr_reader :terrain, :durability, :dmg
+
+  def initialize
+    @damage = 0
+  end
+
+  def set_terrain(name)
+    @terrain = name
+    @durability = TERRAIN_DURABILITIES[name]
+  end
 
   def set_terrain_value(val)
     for ter in TERRAIN_TYPES do
       if val <= TERRAIN_TYPE_THRESHOLDS[ter] then
-        @terrain = ter
+        set_terrain(ter)
         return
+      end
+    end
+  end
+
+  def damage(value)
+    if @durability > 0 then
+      @dmg += value
+      if @dmg >= @durability then
+        @terrain = :empty
+        @durability = TERRAIN_DURABILITIES[@terrain]
+        @dmg = 0
       end
     end
   end

@@ -16,3 +16,9 @@ TERRAIN_SPRITE_INDICES = {
     'stone': 2,
     'bedrock': 3,
 }
+TERRAIN_DURABILITIES = {
+    'empty': 0,
+    'dirt': 1,
+    'stone': 2,
+    'bedrock': -1,
+}

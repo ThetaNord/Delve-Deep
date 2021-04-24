@@ -42,17 +42,30 @@ class Game
       y_diff = inputs.keyboard.up_down
       if x_diff != 0 || y_diff != 0 then
         if state.axes_released == true then
-          if x_diff != 0 then
-            state.player.x += x_diff
-          elsif y_diff != 0 then
-            state.player.y += y_diff
-          end
-          state.axes_released = false
+          move_player(x_diff, y_diff)
         end
       elsif !state.axes_released
         state.axes_released = true
       end
     end
+  end
+
+  def move_player(x_diff, y_diff)
+    target_x = state.player.x
+    target_y = state.player.y
+    if x_diff != 0 then
+      target_x += x_diff
+    elsif y_diff != 0 then
+      target_y += y_diff
+    end
+    tile = @state.floor.get_tile(target_x, target_y)
+    if tile.terrain == :empty then
+      state.player.x = target_x
+      state.player.y = target_y
+    else
+      tile.damage(1)
+    end
+    state.axes_released = false
   end
 
   def render
