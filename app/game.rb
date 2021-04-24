@@ -1,7 +1,9 @@
+require 'app/dungeon.rb'
+
 class Game
 
   attr_accessor :state, :inputs, :outputs, :grid
-  attr_reader :screen
+  attr_reader :screen, :dungeon
 
   def initialize
     @screen = "title"
@@ -15,6 +17,7 @@ class Game
   def process_inputs
     if inputs.mouse.click && @screen = "title"
       @screen = "game"
+      @dungeon = Dungeon.new
     end
   end
 
@@ -35,7 +38,9 @@ class Game
   end
 
   def draw_game
-    outputs.labels << [640, 700, 'Floor 1', 10, 1]
+    floor = @dungeon.current_floor
+    floor_name = (floor.floor_number+1).to_s
+    outputs.labels << [640, 700, 'Floor ' + floor_name, 10, 1]
     x_mid = ((grid.left + grid.right)/2).floor
     y_mid = ((grid.top + grid.bottom)/2).floor
     outputs.sprites << get_character_sprite(0, 5, x_mid, y_mid)
