@@ -8,10 +8,11 @@ class Floor
   end
 
   def generate(x_size, y_size)
-    @map = Array.new(x_size)
+    float_map = Array.new(x_size)
     for i in 0..x_size-1 do
-      @map[i] = Array.new(y_size) {|x| x = rand.round}
+      float_map[i] = Array.new(y_size) {|x| x = rand}
     end
+    @map = float_map
     puts map
   end
 

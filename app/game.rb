@@ -1,4 +1,5 @@
 require 'app/dungeon.rb'
+require 'data/constants.rb'
 
 class Game
 
@@ -53,7 +54,7 @@ class Game
         y: y-8*scale,
         w: 16*scale,
         h: 16*scale,
-        path: 'sprites/characters.png',
+        path: CHARACTER_SPRITES_PATH,
         tile_x: (idx % 4) * 16,
         tile_y: (idx / 4).floor * 16,
         tile_w: 16,
