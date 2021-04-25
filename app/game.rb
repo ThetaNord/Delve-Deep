@@ -142,7 +142,10 @@ class Game
           outputs.sounds << sound
         end
       end
-      state.player.update_restore_timer
+      health_restored = state.player.update_restore_timer
+      if health_restored then
+        outputs.sounds << HEALTH_RESTORATION_SOUND
+      end
       state.axes_released = false
       state.allies = state.dungeon.get_allies
       state.last_move = state.tick_count

@@ -69,8 +69,10 @@ class Character
       if @restore_timer >= @restore_speed then
         @health += 1
         @restore_timer = 0
+        return true
       end
     end
+    return false
   end
 
   def get_closest_enemy_location
