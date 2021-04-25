@@ -1,5 +1,6 @@
 require 'app/dungeon/tile.rb'
 require 'app/dungeon/stairs.rb'
+require 'app/characters/enemy.rb'
 
 class Floor
 
@@ -15,6 +16,70 @@ class Floor
 
   def is_valid_coordinate?(x, y)
     return x >= 0 && y >= 0 && x < @width && y < @height
+  end
+
+  def has_line_of_sight?(x0, y0, x1, y1)
+    start = {x: x0, y: y0}
+    d = {x: x1-x0, y: y1-y0}
+    length = (d.x**2 + d.y**2)**0.5
+    step = 0.25
+    r = { x: step * d.x / length, y: step * d.y / length }
+    i = 0
+    while i < length do
+      vec = {x: start.x + i*r.x, y: start.y + i*r.y }
+      tile = get_tile(vec.x.round, vec.y.round)
+      if tile != nil && tile.terrain != :empty then
+        return false
+      end
+      i += step
+    end
+    return true
+  end
+
+  def get_neighbours(tile)
+    neighbours = Array.new
+    coords = [[0, -1], [-1, 0], [1, 0], [0, 1]]
+    coords.each do |coord|
+      new_tile = get_tile(tile.x+coord[0], tile.y+coord[1])
+      if new_tile != nil then
+        neighbours << new_tile
+      end
+    end
+    return neighbours
+  end
+
+  def get_path(x0, y0, x1, y1)
+    start = get_tile(x0, y0)
+    finish = get_tile(x1, y1)
+    path = nil
+    if start != nil && finish != nil then
+      visited = {start: true}
+      frontier = [start]
+      came_from = Hash.new
+      visiting = nil
+      unless frontier.empty?
+        visiting = frontier.shift
+        get_neighbours(visiting).each do |neighbour|
+          if !visited.has_key?(neighbour) && neighbour.terrain == :empty then
+            frontier << neighbour
+            visited[neighbour] = true
+            came_from[neighbour] = visiting
+            if neighbour == finish then
+              visiting = neighbour
+              break
+            end
+          end
+        end
+      end
+      if visiting == finish then
+        path = [visiting]
+        while visiting != start do
+          visiting = came_from[visiting]
+          path << visiting
+        end
+      end
+    end
+    return path
   end
 
   def add_character(character)
@@ -151,6 +216,7 @@ class Floor
     end
     add_ores
     add_stairs
+    add_enemies
   end
 
   def get_object(x, y)
@@ -241,6 +307,20 @@ class Floor
         end
       end
     end
+  end
+
+  def add_enemies
+    tiles = get_tiles
+    tile = tiles.sample
+    while tile.terrain != :empty do
+      tile = tiles.sample
+    end
+    enemy = Enemy.new
+    enemy.x = tile.x
+    enemy.y = tile.y
+    enemy.floor = self
+    enemy.sprite_index = 4
+    @characters << enemy
   end
 
 end

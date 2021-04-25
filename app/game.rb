@@ -45,6 +45,12 @@ class Game
       if x_diff != 0 || y_diff != 0 then
         if state.axes_released == true then
           move_player(x_diff, y_diff)
+          # Also move other characters
+          state.floor.characters.each do |character|
+            if character.is_player == false then
+              character.move
+            end
+          end
         end
       elsif !state.axes_released
         state.axes_released = true
