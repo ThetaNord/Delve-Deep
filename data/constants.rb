@@ -7,7 +7,7 @@ STAIR_SOUND = "sounds/walk_stairs.wav"
 # Terrain and ore types should be in order of ascending threshold
 TERRAIN_TYPES = [:empty, :dirt, :stone, :bedrock]
 ORE_TYPES = [:gold]
-ORE_VALID_TERRAINS = ["stone"]
+ORE_VALID_TERRAINS = [:stone]
 TERRAIN_TYPE_THRESHOLDS = {
     "empty": 0.12,
     "dirt": 0.55,
