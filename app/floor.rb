@@ -28,6 +28,27 @@ class Floor
     return map.flatten
   end
 
+  def get_tiles_by_distance(x, y, max_distance)
+    all_tiles = get_tiles
+    tiles = Array.new
+    all_tiles.each do |tile|
+      if (tile.x - x).abs <= max_distance && (tile.y - y).abs <= max_distance then
+        tiles << tile
+      end
+    end
+    return tiles
+  end
+
+  def get_objects_by_distance(x, y, max_distance)
+    objs = Array.new
+    @objects.each do |object|
+      if (object.x - x).abs <= max_distance && (object.y - y).abs <= max_distance then
+        objs << object
+      end
+    end
+    return objs
+  end
+
   def get_tile(x, y)
     get_tiles.each do |tile|
       if tile.x == x && tile.y == y then

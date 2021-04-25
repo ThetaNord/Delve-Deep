@@ -8,7 +8,7 @@ class Game
 
   def initialize
     @screen = "title"
-    @scale = 2
+    @scale = 8
   end
 
   def tick
@@ -90,15 +90,16 @@ class Game
   end
 
   def draw_dungeon
+    outputs.background_color = [0, 0, 0]
     floor_name = "Floor " + (state.dungeon.floor_number+1).to_s
-    outputs.labels << [640, 700, floor_name, 10, 1]
+    outputs.labels << [640, 700, floor_name, 10, 1, 255, 255, 255, 255]
     # Render tiles
-    tiles = state.floor.get_tiles
+    tiles = state.floor.get_tiles_by_distance(@map_origin[0], @map_origin[1], 3)
     outputs.sprites << tiles.map do |tile|
       terrain_tile_in_game(tile.x, tile.y, tile.sprite_index)
     end
     # Render objects
-    objects = state.floor.objects
+    objects = state.floor.get_objects_by_distance(@map_origin[0], @map_origin[1], 3)
     outputs.sprites << objects.map do |object|
       object_tile_in_game(object.x, object.y, object.sprite_index)
     end
@@ -107,6 +108,8 @@ class Game
     characters.each do |character|
       outputs.sprites << character_tile_in_game(character.x, character.y, character.sprite_index)
     end
+    # Render darkness overlay
+    outputs.sprites << {x: @x_mid - 56*@scale, y: @y_mid - 56*@scale, w: 112*@scale, h: 112*@scale, path: "sprites/darkness-overlay.png"}
   end
 
   def character_tile_in_game(x, y, char_idx)
