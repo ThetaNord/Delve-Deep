@@ -130,6 +130,7 @@ class Game
         @map_origin = state.dungeon.get_player_position
       end
       render_dungeon
+      render_ui
     when "gameover"
       render_gameover
     end
@@ -144,8 +145,6 @@ class Game
 
   def render_dungeon
     outputs.background_color = [0, 0, 0]
-    floor_name = "Floor " + (state.dungeon.floor_number+1).to_s
-    outputs.labels << [640, 700, floor_name, 10, 1, 255, 255, 255, 255]
     # Render tiles
     tiles = state.floor.get_tiles_by_distance(@map_origin[0], @map_origin[1], 3)
     outputs.sprites << tiles.map do |tile|
@@ -163,6 +162,35 @@ class Game
     end
     # Render darkness overlay
     outputs.sprites << {x: @x_mid - 56*@scale, y: @y_mid - 56*@scale, w: 112*@scale, h: 112*@scale, path: "sprites/darkness-overlay-large.png"}
+  end
+
+  def render_ui
+    floor_name = "Floor -" + (state.dungeon.floor_number+1).to_s
+    outputs.labels << [grid.right-30, grid.top-30, floor_name, 10, 2, 255, 255, 255, 255]
+    # Draw health as hearts
+    for i in 0...(state.player.max_health/2).floor do
+      sprite_index = 1
+      if state.player.health > i*2 then
+        sprite_index = 0
+      end
+      outputs.sprites << {
+        x: grid.left + 30 + 48*i, y: grid.top - 70,
+        w: 48, h: 48,
+        tile_x: (sprite_index % 4) * 16, tile_y: (sprite_index / 4).floor * 16,
+        tile_w: 16, tile_h: 16,
+        path: ICON_SPRITES_PATH
+      }
+    end
+    # Draw bag of money for score
+    sprite_index = 2
+    outputs.sprites << {
+      x: grid.left + 25, y: grid.top - 150,
+      w: 64, h: 64,
+      tile_x: (sprite_index % 4) * 16, tile_y: (sprite_index / 4).floor * 16,
+      tile_w: 16, tile_h: 16,
+      path: ICON_SPRITES_PATH
+    }
+    outputs.labels << [grid.left + 100, grid.top - 100, state.score, 10, 0, 255, 255, 255, 255]
   end
 
   def render_gameover

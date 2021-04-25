@@ -1,6 +1,7 @@
 CHARACTER_SPRITES_PATH = 'sprites/characters.png'
 TILE_SPRITES_PATH = 'sprites/tiles.png'
 OBJECT_SPRITES_PATH = 'sprites/objects.png'
+ICON_SPRITES_PATH = 'sprites/icons.png'
 
 STAIR_SOUND = "sounds/walk_stairs.wav"
 ATTACK_SOUND = "sounds/attack.wav"
