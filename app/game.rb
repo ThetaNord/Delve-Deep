@@ -8,7 +8,7 @@ class Game
 
   def initialize
     @screen = "title"
-    @scale = 8
+    @scale = 6
   end
 
   def tick
@@ -123,7 +123,7 @@ class Game
       outputs.sprites << character_tile_in_game(character.x, character.y, character.sprite_index)
     end
     # Render darkness overlay
-    outputs.sprites << {x: @x_mid - 56*@scale, y: @y_mid - 56*@scale, w: 112*@scale, h: 112*@scale, path: "sprites/darkness-overlay.png"}
+    outputs.sprites << {x: @x_mid - 56*@scale, y: @y_mid - 56*@scale, w: 112*@scale, h: 112*@scale, path: "sprites/darkness-overlay-large.png"}
   end
 
   def character_tile_in_game(x, y, char_idx)
