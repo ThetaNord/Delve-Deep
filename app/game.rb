@@ -46,10 +46,13 @@ class Game
         if state.axes_released == true then
           move_player(x_diff, y_diff)
           # Also move other characters
-          state.floor.characters.each do |character|
-            if character.is_player == false then
-              character.move
+          if state.phase == :move_enemy then
+            state.floor.characters.each do |character|
+              if character.is_player == false then
+                character.move
+              end
             end
+            state.phase = :move_player
           end
         end
       elsif !state.axes_released
@@ -89,6 +92,7 @@ class Game
         end
       end
       state.axes_released = false
+      state.phase = :move_enemy
     end
   end
 

@@ -52,12 +52,12 @@ class Floor
     start = get_tile(x0, y0)
     finish = get_tile(x1, y1)
     path = nil
-    if start != nil && finish != nil then
+    if start != nil && finish != nil && start != finish then
       visited = {start: true}
       frontier = [start]
       came_from = Hash.new
       visiting = nil
-      unless frontier.empty?
+      while !frontier.empty? && visiting != finish do
         visiting = frontier.shift
         get_neighbours(visiting).each do |neighbour|
           if !visited.has_key?(neighbour) && neighbour.terrain == :empty then
@@ -72,12 +72,14 @@ class Floor
         end
       end
       if visiting == finish then
-        path = [visiting]
+        path = Array.new
         while visiting != start do
-          visiting = came_from[visiting]
           path << visiting
+          visiting = came_from[visiting]
         end
-        puts "Path compiled"
+        path = path.reverse
+        #path.shift
+        puts "Path compiled! Length: " + path.length.to_s
       end
     end
     return path
