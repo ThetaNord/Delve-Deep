@@ -12,6 +12,11 @@ HEALTH_RESTORATION_SOUND = "sounds/health_restored.wav"
 # How long to wait between NPC movement in frames
 MOVE_DELAY = 9
 
+FOLLOW_BUTTON_BOUNDARIES = {x: 1020, y: 155, w: 96, h: 96 }
+ASSAULT_BUTTON_BOUNDARIES = {x: 1125, y: 155, w: 96, h: 96 }
+MINE_BUTTON_BOUNDARIES = {x: 1020, y: 50, w: 96, h: 96 }
+ESCAPE_BUTTON_BOUNDARIES = {x: 1125, y: 50, w: 96, h: 96 }
+
 # Terrain and ore types should be in order of ascending threshold
 TERRAIN_TYPES = [:empty, :dirt, :stone, :bedrock]
 ORE_TYPES = [:gold]

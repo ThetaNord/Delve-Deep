@@ -63,7 +63,7 @@ class Floor
       while !frontier.empty? && visiting != finish do
         visiting = frontier.shift
         get_neighbours(visiting).each do |neighbour|
-          if !visited.has_key?(neighbour) && ((path_type == :open && neighbour.terrain == :empty)||(path_type == :mineable && neighbour.terrain != :bedrock)) then
+          if !visited.has_key?(neighbour) && ((path_type == :open && neighbour.terrain == :empty) || (path_type == :mineable && neighbour.terrain != :bedrock)) then
             frontier << neighbour
             visited[neighbour] = true
             came_from[neighbour] = visiting

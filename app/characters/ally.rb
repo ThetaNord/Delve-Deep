@@ -17,6 +17,7 @@ class Ally < Character
     @max_damage = 3 + (3*rand).round
     @sprite_index = 1 + (2*rand).round
     @vision = 3 + (3*rand).round
+    @mining_speed = 5 + (10*rand).round
     @ai_state = :follow
   end
 
@@ -32,8 +33,8 @@ class Ally < Character
     objects.each do |object|
       if object.respond_to?("direction") then
         if object.direction == "down" && @floor.has_line_of_sight?(@x, @y, object.x, object.y) then
-          puts "Ally found stairs!"
-          stairs_seen_at = @floor.get_tile(object.x, object.y)
+          @stairs_seen_at = @floor.get_tile(object.x, object.y)
+          puts "Stairs seen at: " + @stairs_seen_at.to_s
         end
       end
     end
@@ -44,8 +45,8 @@ class Ally < Character
     characters.each do |character|
       if character.is_player then
         if @floor.has_line_of_sight?(@x, @y, character.x, character.y) then
-          puts "Ally saw player!"
           @player_last_seen_at = @floor.get_tile(character.x, character.y)
+          puts "Player last seen at: " + @player_last_seen_at.to_s
           if !@allied then
             @allied = true
           end
@@ -60,6 +61,7 @@ class Ally < Character
     closest_enemy_at = get_closest_enemy_location
     if closest_enemy_at != nil && closest_enemy_at != @enemy_last_seen_at then
       @enemy_last_seen_at = closest_enemy_at
+      puts "Enemy last seen at: " + @enemy_last_seen_at.to_s
     end
   end
 
@@ -69,7 +71,6 @@ class Ally < Character
     closest_ore = nil
     tiles.each do |tile|
       if ORE_TYPES.include?(tile.terrain) then
-        puts "Ally found ore!"
         distance = (tile.x - @x).abs + (tile.y - @y).abs
         if distance < min_distance then
           min_distance = distance
@@ -78,13 +79,16 @@ class Ally < Character
       end
     end
     if closest_ore != nil then
-      ore_last_seen_at = @floor.get_tile(closest_ore.x, closest_ore.y)
+      @ore_last_seen_at = closest_ore
+      puts "Ore last seen at: " + @ore_last_seen_at.to_s
     end
   end
 
   def set_ai_state(state)
-    @ai_state = state
-    @path = nil
+    if @ai_state != state then
+      @ai_state = state
+      @path = nil
+    end
   end
 
   def move
@@ -92,12 +96,16 @@ class Ally < Character
       action = nil
       case @ai_state
       when :follow
+        puts "Following"
         action = follow
       when :assault
+        puts "Assaulting"
         action = assault
       when :mine
+        puts "Mining"
         action = mine
       when :escape
+        puts "Escaping"
         action = escape
       end
     end
@@ -163,7 +171,7 @@ class Ally < Character
           @y = target.y
           return :move
         else
-          damage(@mining_speed)
+          target.damage(@mining_speed)
           return target.terrain
         end
       elsif !is_ally?(other_char) then

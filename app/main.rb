@@ -7,6 +7,7 @@ def tick(args)
     $game = Game.new
     args.state.axes_released = true
     args.state.phase = :menu
+    args.state.ally_ai = :follow
     puts "New game created"
   end
   $game.state = args.state

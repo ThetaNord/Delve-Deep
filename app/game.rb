@@ -18,6 +18,7 @@ class Game
       unless state.allies.empty? then
         if state.tick_count - state.last_move > MOVE_DELAY then
           character = state.allies.shift
+          character.set_ai_state(state.ally_ai)
           if character.respond_to?("check_all") then
             character.check_all
           end
@@ -95,6 +96,22 @@ class Game
         end
       elsif !state.axes_released
         state.axes_released = true
+      end
+      # Check for AI mode button presses
+      check_ai_clicks
+    end
+  end
+
+  def check_ai_clicks
+    if inputs.mouse.click then
+      if inputs.mouse.click.point.inside_rect?(FOLLOW_BUTTON_BOUNDARIES.values) then
+        state.ally_ai = :follow
+      elsif inputs.mouse.click.point.inside_rect?(ASSAULT_BUTTON_BOUNDARIES.values) then
+        state.ally_ai = :assault
+      elsif inputs.mouse.click.point.inside_rect?(MINE_BUTTON_BOUNDARIES.values) then
+        state.ally_ai = :mine
+      elsif inputs.mouse.click.point.inside_rect?(ESCAPE_BUTTON_BOUNDARIES.values) then
+        state.ally_ai = :escape
       end
     end
   end
@@ -234,6 +251,55 @@ class Game
       moving_text = "Moving " + (state.phase == :move_allies ? "allies" : "enemies") + "..."
       outputs.labels << [grid.left + 620, grid.bottom + 100, moving_text, 10, 1, 255, 255, 255, 255]
     end
+    # Draw AI buttons
+    sprite_index = 4 + (state.ally_ai == :follow ? 1 : 0)
+    outputs.sprites << {
+      x: FOLLOW_BUTTON_BOUNDARIES.x,
+      y: FOLLOW_BUTTON_BOUNDARIES.y,
+      w: FOLLOW_BUTTON_BOUNDARIES.w,
+      h: FOLLOW_BUTTON_BOUNDARIES.h,
+      path: ICON_SPRITES_PATH,
+      tile_x: (sprite_index % 4) * 16,
+      tile_y: (sprite_index / 4).floor * 16,
+      tile_w: 16,
+      tile_h: 16,
+    }
+    sprite_index = 6 + (state.ally_ai == :assault ? 1 : 0)
+    outputs.sprites << {
+      x: ASSAULT_BUTTON_BOUNDARIES.x,
+      y: ASSAULT_BUTTON_BOUNDARIES.y,
+      w: ASSAULT_BUTTON_BOUNDARIES.w,
+      h: ASSAULT_BUTTON_BOUNDARIES.h,
+      path: ICON_SPRITES_PATH,
+      tile_x: (sprite_index % 4) * 16,
+      tile_y: (sprite_index / 4).floor * 16,
+      tile_w: 16,
+      tile_h: 16,
+    }
+    sprite_index = 8 + (state.ally_ai == :mine ? 1 : 0)
+    outputs.sprites << {
+      x: MINE_BUTTON_BOUNDARIES.x,
+      y: MINE_BUTTON_BOUNDARIES.y,
+      w: MINE_BUTTON_BOUNDARIES.w,
+      h: MINE_BUTTON_BOUNDARIES.h,
+      path: ICON_SPRITES_PATH,
+      tile_x: (sprite_index % 4) * 16,
+      tile_y: (sprite_index / 4).floor * 16,
+      tile_w: 16,
+      tile_h: 16,
+    }
+    sprite_index = 10 + (state.ally_ai == :escape ? 1 : 0)
+    outputs.sprites << {
+      x: ESCAPE_BUTTON_BOUNDARIES.x,
+      y: ESCAPE_BUTTON_BOUNDARIES.y,
+      w: ESCAPE_BUTTON_BOUNDARIES.w,
+      h: ESCAPE_BUTTON_BOUNDARIES.h,
+      path: ICON_SPRITES_PATH,
+      tile_x: (sprite_index % 4) * 16,
+      tile_y: (sprite_index / 4).floor * 16,
+      tile_w: 16,
+      tile_h: 16,
+    }
   end
 
   def render_gameover
