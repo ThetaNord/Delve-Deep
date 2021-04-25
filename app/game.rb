@@ -12,7 +12,47 @@ class Game
   end
 
   def tick
-    process_inputs
+    if state.phase == :menu || state.phase == :move_player then
+      process_inputs
+    elsif state.phase == :move_allies then
+      unless state.allies.empty? then
+        if state.tick_count - state.last_move > MOVE_DELAY then
+          character = state.allies.shift
+          if character.respond_to?("check_all") then
+            character.check_all
+          end
+          action = character.move
+          case action
+          when :attack
+            outputs.sounds << ATTACK_SOUND
+          end
+          character.update_restore_timer
+          if character.floor == state.floor then
+            state.last_move = state.tick_count
+          end
+        end
+      else
+        state.enemies = state.dungeon.get_enemies
+        state.phase = :move_enemies
+      end
+    elsif state.phase == :move_enemies then
+      unless state.enemies.empty? then
+        if state.tick_count - state.last_move > MOVE_DELAY then
+          character = state.enemies.shift
+          action = character.move
+          case action
+          when :hurt
+            outputs.sounds << HURT_SOUND
+          end
+          character.update_restore_timer
+          if character.floor == state.floor then
+            state.last_move = state.tick_count
+          end
+        end
+      else
+        state.phase = :move_player
+      end
+    end
     render
   end
 
@@ -30,6 +70,7 @@ class Game
       # Check for game over
       if state.player.health <= 0 then
         @screen = "gameover"
+        state.phase = :menu
         return
       end
       # Check for level transition
@@ -47,34 +88,6 @@ class Game
       if x_diff != 0 || y_diff != 0 then
         if state.axes_released == true then
           move_player(x_diff, y_diff)
-          # Also move other characters
-          if state.phase == :move_allies then
-            state.floor.characters.each do |character|
-              if character.is_player == false && character.alignment == :ally then
-                if character.respond_to?("check_all") then
-                  character.check_all
-                end
-                action = character.move
-                case action
-                when :attack
-                  outputs.sounds << ATTACK_SOUND
-                end
-              end
-            end
-            state.phase = :move_enemies
-          end
-          if state.phase == :move_enemies then
-            state.floor.characters.each do |character|
-              if character.alignment == :enemy then
-                action = character.move
-                case action
-                when :hurt
-                  outputs.sounds << HURT_SOUND
-                end
-              end
-            end
-            state.phase = :move_player
-          end
         end
       elsif !state.axes_released
         state.axes_released = true
@@ -105,7 +118,7 @@ class Game
               state.score += 1
               puts "Score: " + state.score.to_s
               state.floor.objects.delete(object)
-              outputs.sounds << "sounds/gold_pickup.wav"
+              outputs.sounds << GOLD_PICKUP_SOUND
             end
           end
         else
@@ -129,7 +142,10 @@ class Game
           outputs.sounds << sound
         end
       end
+      state.player.update_restore_timer
       state.axes_released = false
+      state.allies = state.dungeon.get_allies
+      state.last_move = state.tick_count
       state.phase = :move_allies
     end
   end

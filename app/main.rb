@@ -6,7 +6,7 @@ def tick(args)
   if $game == nil then
     $game = Game.new
     args.state.axes_released = true
-    args.outputs.background_color = [0, 0, 0]
+    args.state.phase = :menu
     puts "New game created"
   end
   $game.state = args.state

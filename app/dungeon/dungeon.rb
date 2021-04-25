@@ -17,12 +17,38 @@ class Dungeon
   end
 
   def get_player
-    current_floor.characters.each do |char|
-      if char.is_player then
-        return char
+    @floors.each do |floor|
+      floor.characters.each do |char|
+        if char.is_player then
+          return char
+        end
       end
     end
     return nil
+  end
+
+  def get_allies
+    allies = Array.new
+    @floors.each do |floor|
+      floor.characters.each do |character|
+        if character.is_player == false && character.alignment == :ally then
+          allies << character
+        end
+      end
+    end
+    return allies
+  end
+
+  def get_enemies
+    enemies = Array.new
+    @floors.each do |floor|
+      floor.characters.each do |character|
+        if character.alignment == :enemy then
+          enemies << character
+        end
+      end
+    end
+    return enemies
   end
 
   def get_player_position

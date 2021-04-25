@@ -6,6 +6,10 @@ ICON_SPRITES_PATH = 'sprites/icons.png'
 STAIR_SOUND = "sounds/walk_stairs.wav"
 ATTACK_SOUND = "sounds/attack.wav"
 HURT_SOUND = "sounds/hurt.wav"
+GOLD_PICKUP_SOUND = "sounds/gold_pickup.wav"
+
+# How long to wait between NPC movement in frames
+MOVE_DELAY = 6
 
 # Terrain and ore types should be in order of ascending threshold
 TERRAIN_TYPES = [:empty, :dirt, :stone, :bedrock]
