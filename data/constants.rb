@@ -3,6 +3,8 @@ TILE_SPRITES_PATH = 'sprites/tiles.png'
 OBJECT_SPRITES_PATH = 'sprites/objects.png'
 
 STAIR_SOUND = "sounds/walk_stairs.wav"
+ATTACK_SOUND = "sounds/attack.wav"
+HURT_SOUND = "sounds/hurt.wav"
 
 # Terrain and ore types should be in order of ascending threshold
 TERRAIN_TYPES = [:empty, :dirt, :stone, :bedrock]

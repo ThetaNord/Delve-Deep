@@ -9,6 +9,8 @@ class Orc < Enemy
     @speed = 1
     @sprite_index = 4
     @vision = 3
+    @min_damage = 2
+    @max_damage = 3
   end
 
 end

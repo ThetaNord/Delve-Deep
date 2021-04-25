@@ -1,10 +1,11 @@
 class Character
 
   attr_reader :sprite_index
-  attr_accessor :x, :y, :floor, :is_player
-  attr_accessor :health, :max_health, :vision
+  attr_accessor :x, :y, :floor
+  attr_reader :health, :max_health, :vision, :restore_timer, :restore_speed
+  attr_reader :min_damage, :max_damage
   attr_accessor :enemy_last_seen_at, :path
-  attr_accessor :alignment
+  attr_reader :alignment, :is_player
 
   def initialize
     @sprite_index = 0
@@ -12,6 +13,8 @@ class Character
     @x = 0
     @y = 0
     @vision = 5
+    @restore_timer = 0
+    @restore_speed = 10
   end
 
   def set_sprite_index(idx)
@@ -20,6 +23,15 @@ class Character
 
   def is_ally?(character)
     return character.alignment == @alignment
+  end
+
+  def damage(dmg)
+    @health -= dmg
+    @restore_timer = 0
+    if health <= 0
+      @floor.remove_character(self)
+    end
+    puts "Damage: " + dmg.to_s + ", current health: " + @health.to_s
   end
 
   def move
@@ -35,8 +47,29 @@ class Character
       end
     end
     if target != nil then
-      @x = target.x
-      @y = target.y
+      other_char = @floor.get_character_at(target.x, target.y)
+      if other_char == nil then
+        @x = target.x
+        @y = target.y
+        return :move
+      elsif !is_ally?(other_char) then
+        attack(other_char)
+      end
+    end
+  end
+
+  def attack(character)
+    dmg = @min_damage + (rand * (@max_damage - @min_damage)).round
+    character.damage(dmg)
+  end
+
+  def update_restore_timer
+    if @health < @max_health then
+      @restore_timer += 1
+      if @restore_timer >= @restore_speed then
+        @health += 1
+        @restore_timer = 0
+      end
     end
   end
 

@@ -1,5 +1,6 @@
 require 'app/dungeon/floor.rb'
 require 'app/characters/character.rb'
+require 'app/characters/player.rb'
 
 class Dungeon
 
@@ -9,11 +10,10 @@ class Dungeon
     @floors = Array.new
     @floor_number = -1
     next_floor
-    character = Character.new
-    character.is_player = true
-    character.x = current_floor.stairs_up.x
-    character.y = current_floor.stairs_up.y
-    current_floor.add_character(character)
+    player = Player.new
+    player.x = current_floor.stairs_up.x
+    player.y = current_floor.stairs_up.y
+    current_floor.add_character(player)
   end
 
   def get_player

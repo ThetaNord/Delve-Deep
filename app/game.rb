@@ -49,7 +49,11 @@ class Game
           if state.phase == :move_enemy then
             state.floor.characters.each do |character|
               if character.is_player == false then
-                character.move
+                action = character.move
+                case action
+                when :hurt
+                  outputs.sounds << HURT_SOUND
+                end
               end
             end
             state.phase = :move_player
@@ -72,17 +76,34 @@ class Game
     if @state.floor.is_valid_coordinate?(target_x, target_y) then
       tile = @state.floor.get_tile(target_x, target_y)
       if tile.terrain == :empty then
-        state.player.x = target_x
-        state.player.y = target_y
-        # Check for objects
-        object = state.floor.get_object(tile.x, tile.y)
-        if object != nil then
-          # Check for gold
-          if object.respond_to?("get_ore") && object.get_ore == :gold then
-            state.score += 1
-            puts "Score: " + state.score.to_s
-            state.floor.objects.delete(object)
-            outputs.sounds << "sounds/gold_pickup.wav"
+        other_char = @state.floor.get_character_at(target_x, target_y)
+        if other_char == nil then
+          state.player.x = target_x
+          state.player.y = target_y
+          # Check for objects
+          object = state.floor.get_object(tile.x, tile.y)
+          if object != nil then
+            # Check for gold
+            if object.respond_to?("get_ore") && object.get_ore == :gold then
+              state.score += 1
+              puts "Score: " + state.score.to_s
+              state.floor.objects.delete(object)
+              outputs.sounds << "sounds/gold_pickup.wav"
+            end
+          end
+        else
+          # If ally
+          if other_char.alignment == :ally then
+            # Swap places
+            other_char.x = state.player.x
+            other_char.y = state.player.y
+            state.player.x = target_x
+            state.player.y = target_y
+          # Otherwise
+          else
+            # Attack
+            state.player.attack(other_char)
+            outputs.sounds << ATTACK_SOUND
           end
         end
       else

@@ -99,6 +99,15 @@ class Floor
     end
   end
 
+  def get_character_at(x, y)
+    @characters.each do |character|
+      if character.x == x && character.y == y then
+        return character
+      end
+    end
+    return nil
+  end
+
   def get_tiles
     return map.flatten
   end
