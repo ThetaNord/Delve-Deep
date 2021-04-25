@@ -1,5 +1,5 @@
-require 'app/tile.rb'
-require 'app/stairs.rb'
+require 'app/dungeon/tile.rb'
+require 'app/dungeon/stairs.rb'
 
 class Floor
 

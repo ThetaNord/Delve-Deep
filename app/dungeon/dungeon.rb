@@ -1,5 +1,5 @@
-require 'app/floor.rb'
-require 'app/character.rb'
+require 'app/dungeon/floor.rb'
+require 'app/characters/character.rb'
 
 class Dungeon
 

@@ -1,4 +1,4 @@
-require 'app/dungeon.rb'
+require 'app/dungeon/dungeon.rb'
 require 'data/constants.rb'
 
 class Game
