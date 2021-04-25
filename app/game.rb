@@ -143,7 +143,7 @@ class Game
         end
       end
       health_restored = state.player.update_restore_timer
-      if health_restored then
+      if health_restored && state.player.health % 2 == 1 then
         outputs.sounds << HEALTH_RESTORATION_SOUND
       end
       state.axes_released = false
