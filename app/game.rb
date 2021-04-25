@@ -62,8 +62,8 @@ class Game
   end
 
   def move_player(x_diff, y_diff)
-    target_x = state.player.x
-    target_y = state.player.y
+    target_x = @state.player.x
+    target_y = @state.player.y
     if x_diff != 0 then
       target_x += x_diff
     elsif y_diff != 0 then

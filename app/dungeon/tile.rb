@@ -82,12 +82,12 @@ class Tile
     serialize.to_s
   end
 
-  #def to_s
-  #  serialize.to_s
-  #end
-
   def to_s
-    return @terrain
+    serialize.to_s
   end
+
+  #def to_s
+  #  return @terrain
+  #end
 
 end

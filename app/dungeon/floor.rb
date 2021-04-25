@@ -49,6 +49,7 @@ class Floor
   end
 
   def get_path(x0, y0, x1, y1)
+    puts "Looking for path from (" + x0.to_s + ", " + y0.to_s + ") to (" + x1.to_s + ", " + y1.to_s + ")"
     start = get_tile(x0, y0)
     finish = get_tile(x1, y1)
     path = nil
