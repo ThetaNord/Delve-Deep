@@ -22,6 +22,7 @@ class Dungeon
         return char
       end
     end
+    return nil
   end
 
   def get_player_position

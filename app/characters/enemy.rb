@@ -18,7 +18,6 @@ class Enemy < Character
         @path = new_path
       end
     end
-    puts "Path: " + @path.to_s
     # If path is not empty
     if @path != nil then
       if @path.length > 0 then

@@ -17,19 +17,21 @@ class Game
   end
 
   def process_inputs
-    if inputs.mouse.click then
-      if @screen == "title" then
+    if @screen == "title" || @screen == "gameover" then
+      if inputs.keyboard.key_down.enter then
         @screen = "dungeon"
         state.dungeon = Dungeon.new
         state.player = state.dungeon.get_player
         state.floor = state.dungeon.current_floor
         state.score = 0
         puts "New dungeon created"
-      elsif @screen == "dungeon" then
-        state.dungeon.next_floor
       end
-    end
-    if @screen == "dungeon" then
+    elsif @screen == "dungeon" then
+      # Check for game over
+      if state.player.health <= 0 then
+        @screen = "gameover"
+        return
+      end
       # Check for level transition
       if state.floor.stairs_down.x == state.player.x && state.floor.stairs_down.y == state.player.y then
         state.floor.remove_character(state.player)
@@ -122,19 +124,25 @@ class Game
     @y_mid = ((grid.top + grid.bottom)/2).floor
     case @screen
     when "title"
-      draw_title
+      render_title
     when "dungeon"
-      @map_origin = state.dungeon.get_player_position
-      draw_dungeon
+      if state.dungeon.get_player != nil then
+        @map_origin = state.dungeon.get_player_position
+      end
+      render_dungeon
+    when "gameover"
+      render_gameover
     end
   end
 
-  def draw_title
-    outputs.labels << [640, 700, 'Delve Deep', 50, 1]
+  def render_title
+    outputs.background_color = [0, 0, 0]
+    outputs.labels << [640, 670, 'Delve Deep', 50, 1, 255, 255, 255]
     outputs.sprites << get_character_sprite(0, 20, @x_mid, @y_mid)
+    outputs.labels << [640, 150, 'Press Enter to start a new game', 10, 1, 255, 255, 255]
   end
 
-  def draw_dungeon
+  def render_dungeon
     outputs.background_color = [0, 0, 0]
     floor_name = "Floor " + (state.dungeon.floor_number+1).to_s
     outputs.labels << [640, 700, floor_name, 10, 1, 255, 255, 255, 255]
@@ -155,6 +163,14 @@ class Game
     end
     # Render darkness overlay
     outputs.sprites << {x: @x_mid - 56*@scale, y: @y_mid - 56*@scale, w: 112*@scale, h: 112*@scale, path: "sprites/darkness-overlay-large.png"}
+  end
+
+  def render_gameover
+    outputs.background_color = [0, 0, 0]
+    outputs.labels << [640, 600, 'Game Over', 100, 1, 255, 255, 255]
+    # TODO: Stats
+    outputs.labels << [640, 350, 'Score: ' + state.score.to_s, 30, 1, 255, 255, 255, 255]
+    outputs.labels << [640, 200, 'Press Enter to start a new game', 10, 1, 255, 255, 255, 255]
   end
 
   def character_tile_in_game(x, y, char_idx)
