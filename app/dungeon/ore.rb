@@ -13,5 +13,8 @@ class Ore
     end
   end
 
+  def get_ore
+    return @ore
+  end
 
 end

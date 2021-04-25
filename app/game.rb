@@ -23,6 +23,7 @@ class Game
         state.dungeon = Dungeon.new
         state.player = state.dungeon.get_player
         state.floor = state.dungeon.current_floor
+        state.score = 0
         puts "New dungeon created"
       elsif @screen == "dungeon" then
         state.dungeon.next_floor
@@ -63,6 +64,17 @@ class Game
     if tile.terrain == :empty then
       state.player.x = target_x
       state.player.y = target_y
+      # Check for objects
+      object = state.floor.get_object(tile.x, tile.y)
+      if object != nil then
+        # Check for gold
+        if object.respond_to?("get_ore") && object.get_ore == :gold then
+          state.score += 1
+          puts "Score: " + state.score.to_s
+          state.floor.objects.delete(object)
+          outputs.sounds << "sounds/gold_pickup.wav"
+        end
+      end
     else
       sound = tile.damage(1)
       if sound != nil then

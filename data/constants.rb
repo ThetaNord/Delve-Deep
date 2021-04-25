@@ -38,5 +38,5 @@ ORE_THRESHOLDS = {
     "gold": 0.05
 }
 ORE_VEIN_THRESHOLDS = {
-    "gold": 0.15
+    "gold": 0.2
 }

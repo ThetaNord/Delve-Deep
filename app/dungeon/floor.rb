@@ -203,7 +203,7 @@ class Floor
   def add_ores
     puts ORE_VALID_TERRAINS.include?("stone")
     for tile in get_tiles do
-      if ORE_VALID_TERRAINS.include?(tile.terrain.to_s) #&& !tile.has_ore? then
+      if ORE_VALID_TERRAINS.include?(tile.terrain.to_s) && !tile.has_ore? then
         puts "Potential ore position found"
         for ore in ORE_TYPES do
           if rand <= ORE_THRESHOLDS[ore] then
