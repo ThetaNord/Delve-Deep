@@ -36,6 +36,7 @@ class Game
         state.player.x = state.floor.stairs_up.x
         state.player.y = state.floor.stairs_up.y
         state.floor.add_character(state.player)
+        outputs.sounds << STAIR_SOUND
       end
       # Check for directional input
       x_diff = inputs.keyboard.left_right
@@ -63,7 +64,10 @@ class Game
       state.player.x = target_x
       state.player.y = target_y
     else
-      tile.damage(1)
+      sound = tile.damage(1)
+      if sound != nil then
+        outputs.sounds << sound
+      end
     end
     state.axes_released = false
   end

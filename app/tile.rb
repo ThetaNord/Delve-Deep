@@ -24,6 +24,7 @@ class Tile
   end
 
   def damage(value)
+    sound = TERRAIN_DIG_SOUNDS[@terrain]
     if @durability > 0 then
       @dmg += value
       if @dmg >= @durability then
@@ -32,6 +33,7 @@ class Tile
         @dmg = 0
       end
     end
+    return sound
   end
 
   def sprite_index

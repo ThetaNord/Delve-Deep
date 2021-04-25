@@ -2,6 +2,8 @@ CHARACTER_SPRITES_PATH = 'sprites/characters.png'
 TILE_SPRITES_PATH = 'sprites/tiles.png'
 OBJECT_SPRITES_PATH = 'sprites/objects.png'
 
+STAIR_SOUND = "sounds/walk_stairs.wav"
+
 # Terrain types should be in order of ascending threshold
 TERRAIN_TYPES = [:empty, :dirt, :stone, :bedrock]
 TERRAIN_TYPE_THRESHOLDS = {
@@ -21,4 +23,10 @@ TERRAIN_DURABILITIES = {
     'dirt': 1,
     'stone': 2,
     'bedrock': -1,
+}
+TERRAIN_DIG_SOUNDS = {
+    'empty': nil,
+    'dirt': "sounds/dig_dirt.wav",
+    'stone': nil, #"sounds/dig_stone.wav",
+    'bedrock': "sounds/dig_bedrock.wav",
 }
