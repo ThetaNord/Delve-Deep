@@ -29,7 +29,7 @@ class Dungeon
 
   def next_floor
     floor = Floor.new
-    floor.generate_floor_map(18, 18)
+    floor.generate_floor_map(15, 15)
     @floors << floor
     puts "Total floors: " + @floors.length.to_s
     @floor_number += 1

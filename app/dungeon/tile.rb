@@ -1,12 +1,14 @@
 require 'data/constants.rb'
+require 'app/dungeon/ore.rb'
 
 class Tile
 
-  attr_accessor :x, :y
+  attr_accessor :x, :y, :floor
   attr_reader :terrain, :durability, :dmg
 
   def initialize
     @damage = 0
+    @ore = nil
   end
 
   def set_terrain(name)
@@ -23,11 +25,26 @@ class Tile
     end
   end
 
+  def set_ore(ore)
+    set_terrain(ore)
+  end
+
+  def has_ore?
+    return ORE_TYPES.include?(@terrain)
+  end
+
+  def spawn_ore
+    @floor.objects << Ore.new(@x, @y, @terrain)
+  end
+
   def damage(value)
     sound = TERRAIN_DIG_SOUNDS[@terrain]
     if @durability > 0 then
       @dmg += value
       if @dmg >= @durability then
+        if has_ore? then
+          spawn_ore
+        end
         @terrain = :empty
         @durability = TERRAIN_DURABILITIES[@terrain]
         @dmg = 0

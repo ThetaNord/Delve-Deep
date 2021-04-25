@@ -4,7 +4,8 @@ require 'app/dungeon/stairs.rb'
 class Floor
 
   attr_reader :map, :width, :height, :characters
-  attr_reader :objects, :stairs_down, :stairs_up
+  attr_reader :stairs_down, :stairs_up
+  attr_accessor :objects
 
   def initialize
     @map = Array.new
@@ -55,6 +56,7 @@ class Floor
         return tile
       end
     end
+    return nil
   end
 
   def generate_floor_map(w, h)
@@ -127,12 +129,14 @@ class Floor
         tile = Tile.new
         tile.x = i
         tile.y = j
+        tile.floor = self
         x = (i*x_ratio).floor
         y = (j*y_ratio).floor
         tile.set_terrain_value(float_map[x][y])
         @map[i] << tile
       end
     end
+    add_ores
     add_stairs
   end
 
@@ -194,6 +198,36 @@ class Floor
     @stairs_up.x = stair_x
     @stairs_up.y = stair_y
     @objects << @stairs_up
+  end
+
+  def add_ores
+    puts ORE_VALID_TERRAINS.include?("stone")
+    for tile in get_tiles do
+      if ORE_VALID_TERRAINS.include?(tile.terrain.to_s) #&& !tile.has_ore? then
+        puts "Potential ore position found"
+        for ore in ORE_TYPES do
+          if rand <= ORE_THRESHOLDS[ore] then
+            add_ore(tile, ore)
+          end
+        end
+      end
+    end
+  end
+
+  def add_ore(tile, ore)
+    if tile != nil then
+      tile.set_ore(ore)
+      puts "Ore spawned at " + tile.x.to_s + ", " + tile.y.to_s
+      coords = [[0, -1], [-1, 0], [1, 0], [0, 1]]
+      coords.each do |coord|
+        new_tile = get_tile(tile.x+coord[0], tile.y+coord[1])
+        if new_tile != nil && !new_tile.has_ore? && ORE_VALID_TERRAINS.include?(new_tile.terrain) then
+          if rand < ORE_VEIN_THRESHOLDS[ore] then
+            add_ore(new_tile, ore)
+          end
+        end
+      end
+    end
   end
 
 end
