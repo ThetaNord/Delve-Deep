@@ -4,7 +4,7 @@ require 'app/characters/character.rb'
 class Ally < Character
 
   attr_accessor :ai_state, :allied
-  attr_accessor :stairs_seen_at, :player_last_seen_at, :ore_last_seen_at
+  attr_accessor :stairs_seen_at, :player_last_seen_at, :ore_last_seen_at, :ore_item_last_seen
 
   def initialize
     super
@@ -33,6 +33,7 @@ class Ally < Character
     check_stairs
     check_enemies
     check_ore
+    check_ore_item
   end
 
   def check_stairs
@@ -91,6 +92,27 @@ class Ally < Character
     end
   end
 
+  def check_ore_item
+    objects = @floor.get_objects_by_distance(@x, @y, @vision)
+    min_distance = 999
+    closest_ore_item = nil
+    objects.each do |object|
+      if object.respond_to?("get_ore") then
+        if @floor.has_line_of_sight?(@x, @y, object.x, object.y) then
+          distance = (object.x - @x).abs + (object.y - @y).abs
+          if distance < min_distance then
+            min_distance = distance
+            closest_ore_item = object
+          end
+        end
+      end
+    end
+    if closest_ore_item != nil then
+      @ore_item_last_seen_at = @floor.get_tile(closest_ore_item.x, closest_ore_item.y)
+      puts "Ore item seen at: " + @ore_item_last_seen_at.to_s
+    end
+  end
+
   def set_ai_state(state)
     if @ai_state != state then
       @ai_state = state
@@ -135,6 +157,9 @@ class Ally < Character
       if other_char == nil then
         @x = target.x
         @y = target.y
+        if @floor.get_tile(@x, @y) == @player_last_seen_at then
+          @player_last_seen_at = nil
+        end
         return :move
       elsif !is_ally?(other_char) then
         attack(other_char)
@@ -155,6 +180,9 @@ class Ally < Character
       if other_char == nil then
         @x = target.x
         @y = target.y
+        if @floor.get_tile(@x, @y) == @enemy_last_seen_at then
+          @enemy_last_seen_at = nil
+        end
         return :move
       elsif !is_ally?(other_char) then
         attack(other_char)
@@ -164,8 +192,10 @@ class Ally < Character
   end
 
   def mine
-    if @path == nil || @path.length == 0 || @path[-1] != @ore_last_seen_at then
-      if @ore_last_seen_at != nil then
+    if @path == nil || @path.length == 0 || (@path[-1] != @ore_last_seen_at && @path[-1] != @ore_item_last_seen_at) then
+      if @ore_item_last_seen_at != nil then
+        @path = @floor.get_path(@x, @y, @ore_item_last_seen_at.x, @ore_item_last_seen_at.y, :mineable)
+      elsif @ore_last_seen_at != nil then
         @path = @floor.get_path(@x, @y, @ore_last_seen_at.x, @ore_last_seen_at.y, :mineable)
       end
     end
@@ -176,6 +206,12 @@ class Ally < Character
         if target.terrain == :empty then
           @x = target.x
           @y = target.y
+          if @floor.get_tile(@x, @y) == @ore_last_seen_at then
+            @ore_last_seen_at = nil
+          end
+          if @floor.get_tile(@x, @y) == @ore_item_last_seen_at then
+            @ore_item_last_seen_at = nil
+          end
           return :move
         else
           target.damage(@mining_speed)
