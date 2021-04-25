@@ -48,9 +48,24 @@ class Game
         if state.axes_released == true then
           move_player(x_diff, y_diff)
           # Also move other characters
-          if state.phase == :move_enemy then
+          if state.phase == :move_allies then
             state.floor.characters.each do |character|
-              if character.is_player == false then
+              if character.is_player == false && character.alignment == :ally then
+                if character.respond_to?("check_all") then
+                  character.check_all
+                end
+                action = character.move
+                case action
+                when :attack
+                  outputs.sounds << ATTACK_SOUND
+                end
+              end
+            end
+            state.phase = :move_enemies
+          end
+          if state.phase == :move_enemies then
+            state.floor.characters.each do |character|
+              if character.alignment == :enemy then
                 action = character.move
                 case action
                 when :hurt
@@ -115,7 +130,7 @@ class Game
         end
       end
       state.axes_released = false
-      state.phase = :move_enemy
+      state.phase = :move_allies
     end
   end
 
