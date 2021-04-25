@@ -1,3 +1,5 @@
+require 'app/characters/character.rb'
+
 class Enemy < Character
 
   def initialize

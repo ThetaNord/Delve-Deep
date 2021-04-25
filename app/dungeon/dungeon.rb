@@ -11,6 +11,8 @@ class Dungeon
     next_floor
     character = Character.new
     character.is_player = true
+    character.x = current_floor.stairs_up.x
+    character.y = current_floor.stairs_up.y
     current_floor.add_character(character)
   end
 

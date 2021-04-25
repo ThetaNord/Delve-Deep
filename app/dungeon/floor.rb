@@ -1,6 +1,7 @@
 require 'app/dungeon/tile.rb'
 require 'app/dungeon/stairs.rb'
 require 'app/characters/enemy.rb'
+require 'app/characters/skeleton.rb'
 
 class Floor
 
@@ -317,11 +318,10 @@ class Floor
     while tile.terrain != :empty do
       tile = tiles.sample
     end
-    enemy = Enemy.new
+    enemy = Skeleton.new
     enemy.x = tile.x
     enemy.y = tile.y
     enemy.floor = self
-    enemy.sprite_index = 4
     @characters << enemy
   end
 

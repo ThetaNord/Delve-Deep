@@ -1,6 +1,6 @@
 class Character
 
-  attr_accessor :sprite_index
+  attr_reader :sprite_index
   attr_accessor :x, :y, :floor, :is_player
   attr_accessor :health, :max_health, :vision
   attr_accessor :enemy_last_seen_at, :path
@@ -31,6 +31,7 @@ class Character
         break
       else
         neighbours.delete(target)
+        target = nil
       end
     end
     if target != nil then

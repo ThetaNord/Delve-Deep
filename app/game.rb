@@ -128,7 +128,7 @@ class Game
       object_tile_in_game(object.x, object.y, object.sprite_index)
     end
     # Render characters
-    characters = state.floor.characters
+    characters = state.floor.get_characters_by_distance(@map_origin[0], @map_origin[1], 3)
     characters.each do |character|
       outputs.sprites << character_tile_in_game(character.x, character.y, character.sprite_index)
     end
