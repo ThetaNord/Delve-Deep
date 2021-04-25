@@ -33,7 +33,11 @@ class Game
         end
       else
         state.enemies = state.dungeon.get_enemies
-        state.phase = :move_enemies
+        unless state.enemies.empty? then
+          state.phase = :move_enemies
+        else
+          state.phase = :move_player
+        end
       end
     elsif state.phase == :move_enemies then
       unless state.enemies.empty? then
@@ -225,6 +229,11 @@ class Game
       path: ICON_SPRITES_PATH
     }
     outputs.labels << [grid.left + 100, grid.top - 100, state.score, 10, 0, 255, 255, 255, 255]
+    # Draw notification if currently moving allies or enemies
+    if state.phase == :move_allies || state.phase == :move_enemies then
+      moving_text = "Moving " + (state.phase == :move_allies ? "allies" : "enemies") + "..."
+      outputs.labels << [grid.left + 620, grid.bottom + 100, moving_text, 10, 1, 255, 255, 255, 255]
+    end
   end
 
   def render_gameover

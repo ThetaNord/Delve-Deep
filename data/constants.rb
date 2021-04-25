@@ -10,7 +10,7 @@ GOLD_PICKUP_SOUND = "sounds/gold_pickup.wav"
 HEALTH_RESTORATION_SOUND = "sounds/health_restored.wav"
 
 # How long to wait between NPC movement in frames
-MOVE_DELAY = 6
+MOVE_DELAY = 9
 
 # Terrain and ore types should be in order of ascending threshold
 TERRAIN_TYPES = [:empty, :dirt, :stone, :bedrock]
