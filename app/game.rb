@@ -19,6 +19,7 @@ class Game
         if state.tick_count - state.last_move > MOVE_DELAY then
           character = state.allies.shift
           character.set_ai_state(state.ally_ai)
+          check_objects(character)
           if character.respond_to?("check_all") then
             character.check_all
           end
@@ -44,6 +45,7 @@ class Game
       unless state.enemies.empty? then
         if state.tick_count - state.last_move > MOVE_DELAY then
           character = state.enemies.shift
+          check_objects(character)
           action = character.move
           case action
           when :hurt
@@ -79,12 +81,14 @@ class Game
         return
       end
       # Check for level transition
-      if state.floor.stairs_down.x == state.player.x && state.floor.stairs_down.y == state.player.y then
-        state.floor.remove_character(state.player)
-        state.floor = state.dungeon.next_floor
-        state.player.x = state.floor.stairs_up.x
-        state.player.y = state.floor.stairs_up.y
-        state.floor.add_character(state.player)
+      if state.player.floor.stairs_down.x == state.player.x && state.player.floor.stairs_down.y == state.player.y then
+        #state.floor.remove_character(state.player)
+        #state.floor = state.dungeon.next_floor
+        #state.player.x = state.floor.stairs_up.x
+        #state.player.y = state.floor.stairs_up.y
+        #state.floor.add_character(state.player)
+        state.dungeon.move_to_next_floor(state.player)
+        state.floor = state.player.floor
         outputs.sounds << STAIR_SOUND
       end
       # Check for directional input
@@ -112,6 +116,22 @@ class Game
         state.ally_ai = :mine
       elsif inputs.mouse.click.point.inside_rect?(ESCAPE_BUTTON_BOUNDARIES.values) then
         state.ally_ai = :escape
+      end
+    end
+  end
+
+  def check_objects(character)
+    object = character.floor.get_object(character.x, character.y)
+    if object != nil then
+      if object.respond_to?("get_ore") && object.get_ore == :gold then
+        character.floor.objects.delete(object)
+        if character.alignment == :ally then
+          state.score += 1
+          return :gold
+        end
+      elsif object.respond_to?("get_direction") && object.get_direction == "down" then
+        state.dungeon.move_to_next_floor(character)
+        return :stairs
       end
     end
   end

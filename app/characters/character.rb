@@ -17,6 +17,10 @@ class Character
     @restore_speed = 10
   end
 
+  def clear_registers
+    @enemy_last_seen_at = nil
+  end
+
   def set_sprite_index(idx)
     @sprite_index = idx
   end

@@ -4,7 +4,8 @@ require 'app/characters/player.rb'
 
 class Dungeon
 
-  attr_reader :floors, :floor_number
+  attr_reader :floors
+  attr_accessor :floor_number
 
   def initialize
     @floors = Array.new
@@ -64,6 +65,21 @@ class Dungeon
     @floor_number += 1
     puts "Current floor: " + (@floor_number+1).to_s
     return current_floor
+  end
+
+  def move_to_next_floor(character)
+    floor = nil
+    next_floor_idx = @floors.index(character.floor)+1
+    if next_floor_idx >= @floors.length then
+      floor = next_floor
+    else
+      floor = @floors[next_floor_idx]
+    end
+    character.floor.remove_character(character)
+    floor.add_character(character)
+    character.x = floor.stairs_up.x
+    character.y = floor.stairs_up.y
+    character.clear_registers
   end
 
   def current_floor

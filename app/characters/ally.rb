@@ -21,6 +21,13 @@ class Ally < Character
     @ai_state = :follow
   end
 
+  def clear_registers
+    super
+    @player_last_seen_at = nil
+    @stairs_seen_at = nil
+    @ore_last_seen_at = nil
+  end
+
   def check_all
     check_player
     check_stairs

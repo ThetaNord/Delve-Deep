@@ -10,4 +10,8 @@ class Stairs
     end
   end
 
+  def get_direction
+    return @direction
+  end
+
 end
