@@ -13,6 +13,10 @@ class Floor
     @objects = Array.new
   end
 
+  def is_valid_coordinate?(x, y)
+    return x >= 0 && y >= 0 && x < @width && y < @height
+  end
+
   def add_character(character)
     character.floor = self
     @characters << character
@@ -30,9 +34,8 @@ class Floor
   end
 
   def get_tiles_by_distance(x, y, max_distance)
-    all_tiles = get_tiles
     tiles = Array.new
-    all_tiles.each do |tile|
+    get_tiles.each do |tile|
       if (tile.x - x).abs <= max_distance && (tile.y - y).abs <= max_distance then
         tiles << tile
       end
@@ -48,6 +51,16 @@ class Floor
       end
     end
     return objs
+  end
+
+  def get_characters_by_distance(x, y, max_distance)
+    chars = Array.new
+    @characters.each do |character|
+      if (character.x - x).abs <= max_distance && (character.y - y).abs <= max_distance then
+        chars << character
+      end
+    end
+    return chars
   end
 
   def get_tile(x, y)

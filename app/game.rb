@@ -60,28 +60,30 @@ class Game
     elsif y_diff != 0 then
       target_y += y_diff
     end
-    tile = @state.floor.get_tile(target_x, target_y)
-    if tile.terrain == :empty then
-      state.player.x = target_x
-      state.player.y = target_y
-      # Check for objects
-      object = state.floor.get_object(tile.x, tile.y)
-      if object != nil then
-        # Check for gold
-        if object.respond_to?("get_ore") && object.get_ore == :gold then
-          state.score += 1
-          puts "Score: " + state.score.to_s
-          state.floor.objects.delete(object)
-          outputs.sounds << "sounds/gold_pickup.wav"
+    if @state.floor.is_valid_coordinate?(target_x, target_y) then
+      tile = @state.floor.get_tile(target_x, target_y)
+      if tile.terrain == :empty then
+        state.player.x = target_x
+        state.player.y = target_y
+        # Check for objects
+        object = state.floor.get_object(tile.x, tile.y)
+        if object != nil then
+          # Check for gold
+          if object.respond_to?("get_ore") && object.get_ore == :gold then
+            state.score += 1
+            puts "Score: " + state.score.to_s
+            state.floor.objects.delete(object)
+            outputs.sounds << "sounds/gold_pickup.wav"
+          end
+        end
+      else
+        sound = tile.damage(1)
+        if sound != nil then
+          outputs.sounds << sound
         end
       end
-    else
-      sound = tile.damage(1)
-      if sound != nil then
-        outputs.sounds << sound
-      end
+      state.axes_released = false
     end
-    state.axes_released = false
   end
 
   def render
