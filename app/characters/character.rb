@@ -46,7 +46,9 @@ class Character
     closest_enemy = nil
     characters.each do |character|
       if !is_ally?(character) then
+        puts "Enemy at " + character.x.to_s + ", " + character.y.to_s
         if @floor.has_line_of_sight?(@x, @y, character.x, character.y) then
+          puts "Have line of sight"
           distance = (character.x - @x).abs + (character.y - @y).abs
           if distance < min_distance then
             min_distance = distance

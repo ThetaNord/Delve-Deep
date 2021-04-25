@@ -25,7 +25,7 @@ class Floor
     step = 0.25
     r = { x: step * d.x / length, y: step * d.y / length }
     i = 0
-    while i < length do
+    while i < length/step do
       vec = {x: start.x + i*r.x, y: start.y + i*r.y }
       tile = get_tile(vec.x.round, vec.y.round)
       if tile != nil && tile.terrain != :empty then
@@ -77,6 +77,7 @@ class Floor
           visiting = came_from[visiting]
           path << visiting
         end
+        puts "Path compiled"
       end
     end
     return path
@@ -283,7 +284,6 @@ class Floor
     puts ORE_VALID_TERRAINS.include?("stone")
     for tile in get_tiles do
       if ORE_VALID_TERRAINS.include?(tile.terrain) && !tile.has_ore? then
-        puts "Potential ore position found"
         for ore in ORE_TYPES do
           if rand <= ORE_THRESHOLDS[ore] then
             add_ore(tile, ore)
@@ -296,7 +296,6 @@ class Floor
   def add_ore(tile, ore)
     if tile != nil then
       tile.set_ore(ore)
-      puts "Ore spawned at " + tile.x.to_s + ", " + tile.y.to_s
       coords = [[0, -1], [-1, 0], [1, 0], [0, 1]]
       coords.each do |coord|
         new_tile = get_tile(tile.x+coord[0], tile.y+coord[1])
