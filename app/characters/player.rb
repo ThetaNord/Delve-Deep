@@ -9,6 +9,7 @@ class Player < Character
     @restore_speed = 15
     @min_damage = 2
     @max_damage = 4
+    @mining_speed = 10
   end
 
   def move

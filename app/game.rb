@@ -109,7 +109,7 @@ class Game
           end
         end
       else
-        sound = tile.damage(1)
+        sound = tile.damage(state.player.mining_speed)
         if sound != nil then
           outputs.sounds << sound
         end

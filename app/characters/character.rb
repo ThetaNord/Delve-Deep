@@ -3,7 +3,7 @@ class Character
   attr_reader :sprite_index
   attr_accessor :x, :y, :floor
   attr_reader :health, :max_health, :vision, :restore_timer, :restore_speed
-  attr_reader :min_damage, :max_damage
+  attr_reader :min_damage, :max_damage, :mining_speed
   attr_accessor :enemy_last_seen_at, :path
   attr_reader :alignment, :is_player
 

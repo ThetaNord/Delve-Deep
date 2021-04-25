@@ -26,10 +26,10 @@ TERRAIN_SPRITE_INDICES = {
 }
 TERRAIN_DURABILITIES = {
     'empty': 0,
-    'dirt': 1,
-    'stone': 2,
+    'dirt': 10,
+    'stone': 20,
     'bedrock': -1,
-    'gold': 3
+    'gold': 30,
 }
 TERRAIN_DIG_SOUNDS = {
     'empty': nil,

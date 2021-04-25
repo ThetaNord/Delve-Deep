@@ -2,6 +2,7 @@ require 'app/dungeon/tile.rb'
 require 'app/dungeon/stairs.rb'
 require 'app/characters/enemy.rb'
 require 'app/characters/skeleton.rb'
+require 'app/characters/ally.rb'
 
 class Floor
 
@@ -49,7 +50,7 @@ class Floor
     return neighbours
   end
 
-  def get_path(x0, y0, x1, y1)
+  def get_path(x0, y0, x1, y1, path_type = :open)
     puts "Looking for path from (" + x0.to_s + ", " + y0.to_s + ") to (" + x1.to_s + ", " + y1.to_s + ")"
     start = get_tile(x0, y0)
     finish = get_tile(x1, y1)
@@ -62,7 +63,7 @@ class Floor
       while !frontier.empty? && visiting != finish do
         visiting = frontier.shift
         get_neighbours(visiting).each do |neighbour|
-          if !visited.has_key?(neighbour) && neighbour.terrain == :empty then
+          if !visited.has_key?(neighbour) && ((path_type == :open && neighbour.terrain == :empty)||(path_type == :mineable && neighbour.terrain != :bedrock)) then
             frontier << neighbour
             visited[neighbour] = true
             came_from[neighbour] = visiting
@@ -231,6 +232,7 @@ class Floor
     add_ores
     add_stairs
     add_enemies
+    add_allies
   end
 
   def get_object(x, y)
@@ -332,6 +334,19 @@ class Floor
     enemy.y = tile.y
     enemy.floor = self
     @characters << enemy
+  end
+
+  def add_allies
+    tiles = get_tiles
+    tile = tiles.sample
+    while tile.terrain != :empty do
+      tile = tiles.sample
+    end
+    ally = Ally.new
+    ally.x = tile.x
+    ally.y = tile.y
+    ally.floor = self
+    @characters << ally
   end
 
 end
