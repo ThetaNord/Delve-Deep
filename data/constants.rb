@@ -9,8 +9,15 @@ HURT_SOUND = "sounds/hurt.wav"
 GOLD_PICKUP_SOUND = "sounds/gold_pickup.wav"
 HEALTH_RESTORATION_SOUND = "sounds/health_restored.wav"
 
+GOBLIN_WAVE_DELAY = 30
+GOBLIN_WAVE_UNITS = [:orc, :goblin]
+GOBLIN_WAVE_THRESHOLDS = {
+  "orc": 0.4,
+  "goblin": 1.0
+}
+
 # How long to wait between NPC movement in frames
-MOVE_DELAY = 6
+MOVE_DELAY = 3
 
 FOLLOW_BUTTON_BOUNDARIES = {x: 1020, y: 155, w: 96, h: 96 }
 ASSAULT_BUTTON_BOUNDARIES = {x: 1125, y: 155, w: 96, h: 96 }

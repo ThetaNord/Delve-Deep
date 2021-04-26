@@ -1,15 +1,20 @@
 require 'app/dungeon/floor.rb'
 require 'app/characters/character.rb'
 require 'app/characters/player.rb'
+require 'app/characters/enemy.rb'
+require 'app/characters/orc.rb'
+require 'app/characters/goblin.rb'
 
 class Dungeon
 
   attr_reader :floors
   attr_accessor :floor_number
+  attr_reader :wave_number
 
   def initialize
     @floors = Array.new
     @floor_number = -1
+    @wave_number = 1
     next_floor
     player = Player.new
     player.x = current_floor.stairs_up.x
@@ -84,6 +89,33 @@ class Dungeon
 
   def current_floor
     return @floors[@floor_number]
+  end
+
+  def spawn_goblin_wave
+    puts "Spawning goblin wave"
+    cumulative = 0
+    while cumulative < 1 do
+      cumulative += rand * 1.0/(@wave_number)
+      puts cumulative
+      enemy = nil
+      for en in GOBLIN_WAVE_UNITS do
+        if cumulative <= GOBLIN_WAVE_THRESHOLDS[en] then
+          case en
+          when :goblin
+            enemy = Goblin.new
+          when :orc
+            enemy = Orc.new
+          end
+          break
+        end
+      end
+      if enemy != nil then
+        current_floor.add_character(enemy)
+        enemy.x = current_floor.stairs_up.x
+        enemy.y = current_floor.stairs_up.y
+      end
+    end
+    @wave_number += 1
   end
 
 end

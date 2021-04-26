@@ -8,6 +8,7 @@ def tick(args)
     args.state.axes_released = true
     args.state.phase = :menu
     args.state.ally_ai = :follow
+    args.state.until_goblin_wave = GOBLIN_WAVE_DELAY
     puts "New game created"
   end
   $game.state = args.state

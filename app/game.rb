@@ -82,14 +82,10 @@ class Game
       end
       # Check for level transition
       if state.player.floor.stairs_down.x == state.player.x && state.player.floor.stairs_down.y == state.player.y then
-        #state.floor.remove_character(state.player)
-        #state.floor = state.dungeon.next_floor
-        #state.player.x = state.floor.stairs_up.x
-        #state.player.y = state.floor.stairs_up.y
-        #state.floor.add_character(state.player)
         state.dungeon.move_to_next_floor(state.player)
         state.floor = state.player.floor
         outputs.sounds << STAIR_SOUND
+        state.until_goblin_wave = GOBLIN_WAVE_DELAY
       end
       # Check for directional input
       x_diff = inputs.keyboard.left_right
@@ -188,6 +184,11 @@ class Game
         outputs.sounds << HEALTH_RESTORATION_SOUND
       end
       state.axes_released = false
+      state.until_goblin_wave -= 1
+      if state.until_goblin_wave == 0 then
+        state.dungeon.spawn_goblin_wave
+        state.until_goblin_wave = GOBLIN_WAVE_DELAY
+      end
       state.allies = state.dungeon.get_allies
       state.last_move = state.tick_count
       state.phase = :move_allies
