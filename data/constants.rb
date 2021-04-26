@@ -51,8 +51,9 @@ TERRAIN_DURABILITIES = {
 TERRAIN_DIG_SOUNDS = {
     'empty': nil,
     'dirt': "sounds/dig_dirt.wav",
-    'stone': nil, #"sounds/dig_stone.wav",
+    'stone': "sounds/dig_stone.wav",
     'bedrock': "sounds/dig_bedrock.wav",
+    'gold': "sounds/dig_stone.wav",
 }
 ORE_THRESHOLDS = {
     "gold": 0.05
