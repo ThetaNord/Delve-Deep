@@ -19,7 +19,13 @@ class Game
         if state.tick_count - state.last_move > MOVE_DELAY then
           character = state.allies.shift
           character.set_ai_state(state.ally_ai)
-          check_objects(character)
+          action = check_objects(character)
+          case action
+          when :gold
+            outputs.sounds << GOLD_PICKUP_SOUND
+          when :stairs
+            outputs.sounds << STAIR_SOUND
+          end
           if character.respond_to?("check_all") then
             character.check_all
           end
@@ -27,6 +33,14 @@ class Game
           case action
           when :attack
             outputs.sounds << ATTACK_SOUND
+          when :move
+            outputs.sounds << MOVE_SOUND
+          when :dirt
+            outputs.sounds << TERRAIN_DIG_SOUNDS["dirt"]
+          when :stone
+            outputs.sounds << TERRAIN_DIG_SOUNDS["stone"]
+          when :gold
+            outputs.sounds << TERRAIN_DIG_SOUNDS["gold"]
           end
           character.update_restore_timer
           if character.floor == state.floor then
@@ -50,6 +64,8 @@ class Game
           case action
           when :hurt
             outputs.sounds << HURT_SOUND
+          when :move
+            outputs.sounds << MOVE_SOUND
           end
           character.update_restore_timer
           if character.floor == state.floor then
@@ -164,6 +180,7 @@ class Game
             # Swap places
             other_char.x = state.player.x
             other_char.y = state.player.y
+            other_char.path = nil
             state.player.x = target_x
             state.player.y = target_y
           # Otherwise
