@@ -19,14 +19,6 @@ class Game
         if state.tick_count - state.last_move > MOVE_DELAY then
           character = state.allies.shift
           character.set_ai_state(state.ally_ai)
-          check_objects(character)
-#          interaction = check_objects(character)
-#          case interaction
-#          when :gold
-#            outputs.sounds << GOLD_PICKUP_SOUND
-#          when :stairs
-#            outputs.sounds << STAIR_SOUND
-#          end
           if character.respond_to?("check_all") then
             character.check_all
           end
@@ -42,6 +34,13 @@ class Game
 #            outputs.sounds << TERRAIN_DIG_SOUNDS["stone"]
 #          when :gold
 #            outputs.sounds << TERRAIN_DIG_SOUNDS["gold"]
+          end
+          interaction = check_objects(character)
+          case interaction
+          when :gold
+            outputs.sounds << GOLD_PICKUP_SOUND
+          when :stairs
+            outputs.sounds << STAIR_SOUND
           end
           character.update_restore_timer
           if character.floor == state.floor then
