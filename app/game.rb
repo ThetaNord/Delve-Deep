@@ -213,9 +213,9 @@ class Game
 
   def render_title
     outputs.background_color = [0, 0, 0]
-    outputs.labels << [640, 670, 'Delve Deep', 50, 1, 255, 255, 255]
+    outputs.labels << { x: 640, y: 670, text: 'Delve Deep', size_enum: 50, alignment_enum: 1, r: 255, g: 255, b: 255, font: FONT }
     outputs.sprites << get_character_sprite(0, 20, @x_mid, @y_mid)
-    outputs.labels << [640, 150, 'Press Enter to start a new game', 10, 1, 255, 255, 255]
+    outputs.labels << [640, 150, 'Press Enter to start a new game', 10, 1, 255, 255, 255, 255, FONT]
   end
 
   def render_dungeon
@@ -240,8 +240,8 @@ class Game
   end
 
   def render_ui
-    floor_name = "Floor -" + (state.dungeon.floor_number+1).to_s
-    outputs.labels << [grid.right-30, grid.top-30, floor_name, 10, 2, 255, 255, 255, 255]
+    floor_name = "Floor " + (state.dungeon.floor_number+1).to_s
+    outputs.labels << {x: grid.right-30, y: grid.top-30, text: floor_name, size_enum: 10, alignment_enum: 2, r: 255, g: 255, b: 255, font: FONT }
     # Draw health as hearts
     for i in 0...(state.player.max_health/2).floor do
       sprite_index = 1
@@ -265,11 +265,11 @@ class Game
       tile_w: 16, tile_h: 16,
       path: ICON_SPRITES_PATH
     }
-    outputs.labels << [grid.left + 100, grid.top - 100, state.score, 10, 0, 255, 255, 255, 255]
+    outputs.labels << [grid.left + 100, grid.top - 100, state.score, 10, 0, 255, 255, 255, 255, FONT]
     # Draw notification if currently moving allies or enemies
     if state.phase == :move_allies || state.phase == :move_enemies then
       moving_text = "Moving " + (state.phase == :move_allies ? "allies" : "enemies") + "..."
-      outputs.labels << [grid.left + 620, grid.bottom + 100, moving_text, 10, 1, 255, 255, 255, 255]
+      outputs.labels << [grid.left + 640, grid.bottom + 300, moving_text, 10, 1, 255, 255, 255, 255, FONT]
     end
     # Draw AI buttons
     sprite_index = 4 + (state.ally_ai == :follow ? 1 : 0)
@@ -324,10 +324,10 @@ class Game
 
   def render_gameover
     outputs.background_color = [0, 0, 0]
-    outputs.labels << [640, 600, 'Game Over', 100, 1, 255, 255, 255]
+    outputs.labels << { x: 640, y: 600, text: 'Game Over', size_enum: 100, alignment_enum: 1, r: 255, g: 255, b: 255, font: FONT}
     # TODO: Stats
-    outputs.labels << [640, 350, 'Score: ' + state.score.to_s, 30, 1, 255, 255, 255, 255]
-    outputs.labels << [640, 200, 'Press Enter to start a new game', 10, 1, 255, 255, 255, 255]
+    outputs.labels << [640, 350, 'Score: ' + state.score.to_s, 30, 1, 255, 255, 255, 255, FONT]
+    outputs.labels << [640, 200, 'Press Enter to start a new game', 10, 1, 255, 255, 255, 255, FONT]
   end
 
   def character_tile_in_game(x, y, char_idx)
