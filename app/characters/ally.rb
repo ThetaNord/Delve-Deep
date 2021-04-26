@@ -142,6 +142,7 @@ class Ally < Character
       # Move randomly
       super
     end
+    puts action
     return action
   end
 

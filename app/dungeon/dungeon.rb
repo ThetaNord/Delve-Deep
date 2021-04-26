@@ -92,10 +92,10 @@ class Dungeon
   end
 
   def spawn_goblin_wave
-    puts "Spawning goblin wave"
+    puts "Spawning goblin wave #{@wave_number}"
     cumulative = 0
     while cumulative < 1 do
-      cumulative += rand * 1.0/(@wave_number)
+      cumulative += rand * 1.0/(@wave_number)**0.2
       puts cumulative
       enemy = nil
       for en in GOBLIN_WAVE_UNITS do

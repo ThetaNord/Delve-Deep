@@ -3,17 +3,16 @@ TILE_SPRITES_PATH = 'sprites/tiles.png'
 OBJECT_SPRITES_PATH = 'sprites/objects.png'
 ICON_SPRITES_PATH = 'sprites/icons.png'
 
-MOVE_SOUND = "sounds/move.wav"
-
 FONT = "fonts/UnifrakturCook-Bold.ttf"
 
+MOVE_SOUND = "sounds/move.wav"
 STAIR_SOUND = "sounds/walk_stairs.wav"
 ATTACK_SOUND = "sounds/attack.wav"
 HURT_SOUND = "sounds/hurt.wav"
 GOLD_PICKUP_SOUND = "sounds/gold_pickup.wav"
 HEALTH_RESTORATION_SOUND = "sounds/health_restored.wav"
 
-GOBLIN_WAVE_DELAY = 30
+GOBLIN_WAVE_DELAY = 40
 GOBLIN_WAVE_UNITS = [:orc, :goblin]
 GOBLIN_WAVE_THRESHOLDS = {
   "orc": 0.4,
