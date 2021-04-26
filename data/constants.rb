@@ -3,6 +3,8 @@ TILE_SPRITES_PATH = 'sprites/tiles.png'
 OBJECT_SPRITES_PATH = 'sprites/objects.png'
 ICON_SPRITES_PATH = 'sprites/icons.png'
 
+FONT = "fonts/UnifrakturCook-Bold.ttf"
+
 STAIR_SOUND = "sounds/walk_stairs.wav"
 ATTACK_SOUND = "sounds/attack.wav"
 HURT_SOUND = "sounds/hurt.wav"
