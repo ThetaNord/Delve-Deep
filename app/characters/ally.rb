@@ -74,6 +74,12 @@ class Ally < Character
   end
 
   def check_ore
+    # Check that current tile still has ore
+    if @ore_item_last_seen != nil && @floor.has_line_of_sight(@x, @y, @ore_last_seen_at.x, @ore_last_seen_at.y) then
+      unless ORE_TYPES.include?(@ore_last_seen_at.terrain)
+        @ore_last_seen_at = nil
+      end
+    end
     tiles = @floor.get_tiles_by_distance(@x, @y, @vision)
     min_distance = 999
     closest_ore = nil
@@ -187,6 +193,7 @@ class Ally < Character
         return :move
       elsif !is_ally?(other_char) then
         attack(other_char)
+        @path = nil
         return :attack
       end
     end
@@ -216,6 +223,7 @@ class Ally < Character
           return :move
         else
           target.damage(@mining_speed)
+          @path = nil
           return target.terrain
         end
       elsif !is_ally?(other_char) then
