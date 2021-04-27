@@ -7,13 +7,12 @@ require 'app/characters/goblin.rb'
 
 class Dungeon
 
-  attr_reader :floors
-  attr_accessor :floor_number
+  attr_reader :floors, :floor_count
   attr_reader :wave_number, :spawn_queue
 
   def initialize
     @floors = Array.new
-    @floor_number = -1
+    @floor_count = 0
     @wave_number = 1
     @spawn_queue = Array.new
     floor = generate_new_floor
@@ -68,8 +67,8 @@ class Dungeon
     floor.generate_floor_map(15, 15)
     @floors << floor
     puts "Active floors: " + @floors.length.to_s
-    @floor_number += 1
-    puts "Current depth: " + (@floor_number+1).to_s
+    @floor_count += 1
+    puts "Current depth: " + (@floor_count).to_s
     return floor
   end
 
@@ -126,6 +125,12 @@ class Dungeon
   def spawn_next_from_queue
     unless spawn_queue.empty?
 
+    end
+  end
+
+  def trim_floors
+    while @floors.length > 3 do
+      @floors.shift
     end
   end
 

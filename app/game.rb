@@ -51,6 +51,7 @@ class Game
         state.enemies = state.dungeon.get_enemies
         unless state.enemies.empty? then
           state.phase = :move_enemies
+          puts "Enemies: #{state.enemies.length}"
         else
           state.phase = :move_player
         end
@@ -61,16 +62,16 @@ class Game
           character = state.enemies.shift
           check_objects(character)
           action = character.move
-          case action
-          when :hurt
-            outputs.sounds << HURT_SOUND
-#          when :move
-#            outputs.sounds << MOVE_SOUND
-          end
-          character.update_restore_timer
-          if character.floor == state.dungeon.active_floor then
+          if character.floor != nil && character.floor == state.dungeon.active_floor then
+            case action
+            when :hurt
+              outputs.sounds << HURT_SOUND
+#            when :move
+#              outputs.sounds << MOVE_SOUND
+            end
             state.last_move = state.tick_count
           end
+          character.update_restore_timer
         end
       else
         state.phase = :move_player
@@ -99,6 +100,7 @@ class Game
       # Check for level transition
       if state.player.floor.stairs_down.x == state.player.x && state.player.floor.stairs_down.y == state.player.y then
         state.dungeon.move_to_next_floor(state.player)
+        state.dungeon.trim_floors
         state.floor = state.dungeon.active_floor
         outputs.sounds << STAIR_SOUND
         state.until_goblin_wave = GOBLIN_WAVE_DELAY
@@ -258,7 +260,7 @@ class Game
   end
 
   def render_ui
-    floor_name = "Floor " + (state.dungeon.floor_number+1).to_s
+    floor_name = "Floor " + (state.dungeon.floor_count).to_s
     outputs.labels << {x: grid.right-30, y: grid.top-30, text: floor_name, size_enum: 10, alignment_enum: 2, r: 255, g: 255, b: 255, font: FONT }
     # Draw health as hearts
     for i in 0...(state.player.max_health/2).floor do

@@ -82,7 +82,7 @@ class Floor
         end
         path = path.reverse
         #path.shift
-        puts "Path compiled! Length: " + path.length.to_s
+        puts "Path compiled! Length: #{path.length}"
       end
     end
     return path

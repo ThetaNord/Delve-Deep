@@ -4,7 +4,7 @@ require 'app/characters/character.rb'
 class Ally < Character
 
   attr_accessor :ai_state, :allied
-  attr_accessor :stairs_seen_at, :player_last_seen_at, :ore_last_seen_at, :ore_item_last_seen
+  attr_accessor :stairs_seen_at, :player_last_seen_at, :ore_last_seen_at, :ore_item_last_seen_at
 
   def initialize
     super
@@ -26,14 +26,21 @@ class Ally < Character
     @player_last_seen_at = nil
     @stairs_seen_at = nil
     @ore_last_seen_at = nil
+    @ore_item_last_seen_at = nil
   end
 
   def check_all
+    puts "Running ally checks"
     check_player
+    puts "Player last seen at: #{@player_last_seen_at}"
     check_stairs
+    puts "Stairs seen at: #{@stairs_seen_at}"
     check_enemies
+    puts "Enemy last seen at: #{@enemy_last_seen_at}"
     check_ore
+    puts "Ore last seen at: #{@ore_last_seen_at}"
     check_ore_item
+    puts "Ore item last seen at: #{@ore_item_last_seen_at}"
   end
 
   def check_stairs
@@ -42,7 +49,6 @@ class Ally < Character
       if object.respond_to?("direction") then
         if object.direction == "down" && @floor.has_line_of_sight?(@x, @y, object.x, object.y) then
           @stairs_seen_at = @floor.get_tile(object.x, object.y)
-          puts "Stairs seen at: " + @stairs_seen_at.to_s
         end
       end
     end
@@ -54,7 +60,6 @@ class Ally < Character
       if character.is_player then
         if @floor.has_line_of_sight?(@x, @y, character.x, character.y) then
           @player_last_seen_at = @floor.get_tile(character.x, character.y)
-          puts "Player last seen at: " + @player_last_seen_at.to_s
           if !@allied then
             @allied = true
           end
@@ -69,13 +74,12 @@ class Ally < Character
     closest_enemy_at = get_closest_enemy_location
     if closest_enemy_at != nil && closest_enemy_at != @enemy_last_seen_at then
       @enemy_last_seen_at = closest_enemy_at
-      puts "Enemy last seen at: " + @enemy_last_seen_at.to_s
     end
   end
 
   def check_ore
     # Check that current tile still has ore
-    if @ore_item_last_seen != nil && @floor.has_line_of_sight(@x, @y, @ore_last_seen_at.x, @ore_last_seen_at.y) then
+    if @ore_last_seen_at != nil && @floor.has_line_of_sight?(@x, @y, @ore_last_seen_at.x, @ore_last_seen_at.y) then
       unless ORE_TYPES.include?(@ore_last_seen_at.terrain)
         @ore_last_seen_at = nil
       end
@@ -94,11 +98,11 @@ class Ally < Character
     end
     if closest_ore != nil then
       @ore_last_seen_at = closest_ore
-      puts "Ore last seen at: " + @ore_last_seen_at.to_s
     end
   end
 
   def check_ore_item
+    # TODO: check that the current tile still has ore item
     objects = @floor.get_objects_by_distance(@x, @y, @vision)
     min_distance = 999
     closest_ore_item = nil
@@ -115,7 +119,6 @@ class Ally < Character
     end
     if closest_ore_item != nil then
       @ore_item_last_seen_at = @floor.get_tile(closest_ore_item.x, closest_ore_item.y)
-      puts "Ore item seen at: " + @ore_item_last_seen_at.to_s
     end
   end
 
@@ -127,8 +130,8 @@ class Ally < Character
   end
 
   def move
+    action = nil
     if @allied then
-      action = nil
       case @ai_state
       when :follow
         puts "Following"
@@ -200,7 +203,7 @@ class Ally < Character
   end
 
   def mine
-    if @path == nil || @path.length == 0 || (@path[-1] != @ore_last_seen_at && @path[-1] != @ore_item_last_seen_at) then
+    if @path == nil || @path.length == 0 then
       if @ore_item_last_seen_at != nil then
         @path = @floor.get_path(@x, @y, @ore_item_last_seen_at.x, @ore_item_last_seen_at.y, :mineable)
       elsif @ore_last_seen_at != nil then
