@@ -9,17 +9,18 @@ class Dungeon
 
   attr_reader :floors
   attr_accessor :floor_number
-  attr_reader :wave_number
+  attr_reader :wave_number, :spawn_queue
 
   def initialize
     @floors = Array.new
     @floor_number = -1
     @wave_number = 1
-    next_floor
+    @spawn_queue = Array.new
+    floor = generate_new_floor
     player = Player.new
-    player.x = current_floor.stairs_up.x
-    player.y = current_floor.stairs_up.y
-    current_floor.add_character(player)
+    player.x = floor.stairs_up.x
+    player.y = floor.stairs_up.y
+    floor.add_character(player)
   end
 
   def get_player
@@ -62,21 +63,21 @@ class Dungeon
     return [char.x, char.y]
   end
 
-  def next_floor
+  def generate_new_floor
     floor = Floor.new
     floor.generate_floor_map(15, 15)
     @floors << floor
-    puts "Total floors: " + @floors.length.to_s
+    puts "Active floors: " + @floors.length.to_s
     @floor_number += 1
-    puts "Current floor: " + (@floor_number+1).to_s
-    return current_floor
+    puts "Current depth: " + (@floor_number+1).to_s
+    return floor
   end
 
   def move_to_next_floor(character)
     floor = nil
     next_floor_idx = @floors.index(character.floor)+1
     if next_floor_idx >= @floors.length then
-      floor = next_floor
+      floor = generate_new_floor
     else
       floor = @floors[next_floor_idx]
     end
@@ -87,8 +88,8 @@ class Dungeon
     character.clear_registers
   end
 
-  def current_floor
-    return @floors[@floor_number]
+  def active_floor
+    return get_player.floor
   end
 
   def spawn_goblin_wave
@@ -110,12 +111,22 @@ class Dungeon
         end
       end
       if enemy != nil then
-        current_floor.add_character(enemy)
-        enemy.x = current_floor.stairs_up.x
-        enemy.y = current_floor.stairs_up.y
+        active_floor.add_character(enemy)
+        enemy.x = active_floor.stairs_up.x
+        enemy.y = active_floor.stairs_up.y
       end
     end
     @wave_number += 1
+  end
+
+  def clear_spawn_queue
+    spawn_queue = Array.new
+  end
+
+  def spawn_next_from_queue
+    unless spawn_queue.empty?
+
+    end
   end
 
 end

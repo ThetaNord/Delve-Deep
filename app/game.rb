@@ -43,7 +43,7 @@ class Game
             outputs.sounds << STAIR_SOUND
           end
           character.update_restore_timer
-          if character.floor == state.floor then
+          if character.floor == state.dungeon.active_floor then
             state.last_move = state.tick_count
           end
         end
@@ -68,7 +68,7 @@ class Game
 #            outputs.sounds << MOVE_SOUND
           end
           character.update_restore_timer
-          if character.floor == state.floor then
+          if character.floor == state.dungeon.active_floor then
             state.last_move = state.tick_count
           end
         end
@@ -85,7 +85,7 @@ class Game
         @screen = "dungeon"
         state.dungeon = Dungeon.new
         state.player = state.dungeon.get_player
-        state.floor = state.dungeon.current_floor
+        state.floor = state.dungeon.active_floor
         state.score = 0
         puts "New dungeon created"
       end
@@ -99,7 +99,7 @@ class Game
       # Check for level transition
       if state.player.floor.stairs_down.x == state.player.x && state.player.floor.stairs_down.y == state.player.y then
         state.dungeon.move_to_next_floor(state.player)
-        state.floor = state.player.floor
+        state.floor = state.dungeon.active_floor
         outputs.sounds << STAIR_SOUND
         state.until_goblin_wave = GOBLIN_WAVE_DELAY
       end
