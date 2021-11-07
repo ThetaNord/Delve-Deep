@@ -88,7 +88,12 @@ class Dungeon
   end
 
   def active_floor
-    return get_player.floor
+    player = get_player
+    if player != nil then
+      return get_player.floor
+    else
+      return nil
+    end
   end
 
   def spawn_goblin_wave
