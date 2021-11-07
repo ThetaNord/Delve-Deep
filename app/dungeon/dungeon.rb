@@ -110,21 +110,33 @@ class Dungeon
         end
       end
       if enemy != nil then
-        active_floor.add_character(enemy)
-        enemy.x = active_floor.stairs_up.x
-        enemy.y = active_floor.stairs_up.y
+        @spawn_queue << { "enemy": enemy, "floor": active_floor }
+        puts @spawn_queue[-1]
       end
     end
     @wave_number += 1
   end
 
   def clear_spawn_queue
-    spawn_queue = Array.new
+    @spawn_queue = Array.new
   end
 
   def spawn_next_from_queue
-    unless spawn_queue.empty?
-
+    unless @spawn_queue.empty?
+      entry = @spawn_queue[0]
+      puts entry
+      floor = entry[:floor]
+      puts "Floor: #{floor}"
+      x = floor.stairs_up.x
+      y = floor.stairs_up.y
+      character = floor.get_character_at(x, y)
+      if character == nil then
+        enemy = entry[:enemy]
+        floor.add_character(enemy)
+        enemy.x = x
+        enemy.y = y
+        spawn_queue.shift
+      end
     end
   end
 

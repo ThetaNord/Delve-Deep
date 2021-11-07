@@ -48,13 +48,7 @@ class Game
           end
         end
       else
-        state.enemies = state.dungeon.get_enemies
-        unless state.enemies.empty? then
-          state.phase = :move_enemies
-          puts "Enemies: #{state.enemies.length}"
-        else
-          state.phase = :move_player
-        end
+        next_dungeon_phase
       end
     elsif state.phase == :move_enemies then
       unless state.enemies.empty? then
@@ -74,10 +68,28 @@ class Game
           character.update_restore_timer
         end
       else
-        state.phase = :move_player
+        next_dungeon_phase
       end
     end
     render
+  end
+
+  def next_dungeon_phase
+    if state.phase == :move_player
+      state.allies = state.dungeon.get_allies
+      state.phase = :move_allies
+      state.dungeon.spawn_next_from_queue
+    elsif state.phase == :move_allies
+      state.enemies = state.dungeon.get_enemies
+      unless state.enemies.empty?
+        state.phase = :move_enemies
+        puts "Enemies: #{state.enemies.length}"
+      else
+        state.phase = :move_player
+      end
+    elsif state.phase == :move_enemies
+      state.phase = :move_player
+    end
   end
 
   def process_inputs
@@ -88,6 +100,7 @@ class Game
         state.player = state.dungeon.get_player
         state.floor = state.dungeon.active_floor
         state.score = 0
+        state.phase = :move_player
         puts "New dungeon created"
       end
     elsif @screen == "dungeon" then
@@ -182,7 +195,7 @@ class Game
             # Swap places
             other_char.x = state.player.x
             other_char.y = state.player.y
-#            other_char.path = nil
+            other_char.path = nil
             state.player.x = target_x
             state.player.y = target_y
           # Otherwise
@@ -208,9 +221,8 @@ class Game
         state.dungeon.spawn_goblin_wave
         state.until_goblin_wave = GOBLIN_WAVE_DELAY
       end
-      state.allies = state.dungeon.get_allies
       state.last_move = state.tick_count
-      state.phase = :move_allies
+      next_dungeon_phase
     end
   end
 
