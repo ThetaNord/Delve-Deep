@@ -11,6 +11,7 @@ ATTACK_SOUND = "sounds/attack.wav"
 HURT_SOUND = "sounds/hurt.wav"
 GOLD_PICKUP_SOUND = "sounds/gold_pickup.wav"
 HEALTH_RESTORATION_SOUND = "sounds/health_restored.wav"
+GOBLIN_WAVE_SOUND = "sounds/goblin_wave.wav"
 
 GOBLIN_WAVE_DELAY = 40
 GOBLIN_WAVE_UNITS = [:orc, :goblin]

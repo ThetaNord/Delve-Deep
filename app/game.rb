@@ -220,6 +220,7 @@ class Game
       if state.until_goblin_wave == 0 then
         state.dungeon.spawn_goblin_wave
         state.until_goblin_wave = GOBLIN_WAVE_DELAY
+        outputs.sounds << GOBLIN_WAVE_SOUND
       end
       state.last_move = state.tick_count
       next_dungeon_phase
