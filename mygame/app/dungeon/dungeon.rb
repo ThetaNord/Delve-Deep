@@ -148,8 +148,12 @@ class Dungeon
   end
 
   def trim_floors
-    while @floors.length > 3 do
-      @floors.shift
+    player = get_player
+    if player != nil then
+      player_depth = player.floor.depth
+      while @floors[0].depth < player_depth - 2 do
+        @floors.shift
+      end
     end
   end
 
