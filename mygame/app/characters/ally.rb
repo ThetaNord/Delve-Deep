@@ -225,9 +225,10 @@ class Ally < Character
           end
           return :move
         else
+          terrain_hit = target.terrain
           target.damage(@mining_speed)
           @path = nil
-          return target.terrain
+          return terrain_hit
         end
       elsif !is_ally?(other_char) then
         attack(other_char)

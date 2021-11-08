@@ -28,12 +28,12 @@ class Game
             outputs.sounds << ATTACK_SOUND
           when :move
             outputs.sounds << MOVE_SOUND
-#          when :dirt
-#            outputs.sounds << TERRAIN_DIG_SOUNDS["dirt"]
-#          when :stone
-#            outputs.sounds << TERRAIN_DIG_SOUNDS["stone"]
-#          when :gold
-#            outputs.sounds << TERRAIN_DIG_SOUNDS["gold"]
+          when :dirt
+            outputs.sounds << TERRAIN_DIG_SOUNDS[:dirt]
+          when :stone
+            outputs.sounds << TERRAIN_DIG_SOUNDS[:stone]
+          when :gold
+            outputs.sounds << TERRAIN_DIG_SOUNDS[:gold]
           end
           interaction = check_objects(character)
           case interaction
