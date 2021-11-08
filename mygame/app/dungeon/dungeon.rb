@@ -65,9 +65,10 @@ class Dungeon
   def generate_new_floor
     floor = Floor.new
     floor.generate_floor_map(15, 15)
+    @floor_count += 1
+    floor.depth = @floor_count
     @floors << floor
     puts "Active floors: " + @floors.length.to_s
-    @floor_count += 1
     puts "Current depth: " + (@floor_count).to_s
     return floor
   end

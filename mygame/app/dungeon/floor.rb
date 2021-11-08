@@ -8,7 +8,7 @@ class Floor
 
   attr_reader :map, :width, :height, :characters
   attr_reader :stairs_down, :stairs_up
-  attr_accessor :objects
+  attr_accessor :objects, :depth
 
   def initialize
     @map = Array.new
