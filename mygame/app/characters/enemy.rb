@@ -22,7 +22,7 @@ class Enemy < Character
     if @path != nil then
       if @path.length > 0 then
         # Get next square on path
-        target = @path.shift
+        target = @path[0]
       else
         @path = nil
       end
@@ -33,6 +33,7 @@ class Enemy < Character
         puts "Moving"
         @x = target.x
         @y = target.y
+        @path.shift
         if @floor.get_tile(@x, @y) == @enemy_last_seen_at then
           @enemy_last_seen_at = nil
           puts "Enemy last seen at reset"

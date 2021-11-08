@@ -130,6 +130,10 @@ class Game
       end
       # Check for AI mode button presses
       check_ai_clicks
+      # Check for skip
+      if inputs.keyboard.space then
+        next_dungeon_phase
+      end
     end
   end
 

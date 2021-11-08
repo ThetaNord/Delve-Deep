@@ -162,11 +162,12 @@ class Ally < Character
       end
     end
     if @path != nil && @path.length > 0 then
-      target = @path.shift
+      target = @path[0]
       other_char = @floor.get_character_at(target.x, target.y)
       if other_char == nil then
         @x = target.x
         @y = target.y
+        @path.shift
         if @floor.get_tile(@x, @y) == @player_last_seen_at then
           @player_last_seen_at = nil
         end
@@ -174,6 +175,8 @@ class Ally < Character
       elsif !is_ally?(other_char) then
         attack(other_char)
         return :attack
+      else
+        return :stand
       end
     end
   end
@@ -185,11 +188,12 @@ class Ally < Character
       end
     end
     if @path != nil && @path.length > 0 then
-      target = @path.shift
+      target = @path[0]
       other_char = @floor.get_character_at(target.x, target.y)
       if other_char == nil then
         @x = target.x
         @y = target.y
+        @path.shift
         if @floor.get_tile(@x, @y) == @enemy_last_seen_at then
           @enemy_last_seen_at = nil
         end
@@ -198,6 +202,8 @@ class Ally < Character
         attack(other_char)
         @path = nil
         return :attack
+      else
+        return :stand
       end
     end
   end
@@ -211,12 +217,13 @@ class Ally < Character
       end
     end
     if @path != nil && @path.length > 0 then
-      target = @path.shift
+      target = @path[0]
       other_char = @floor.get_character_at(target.x, target.y)
       if other_char == nil then
         if target.terrain == :empty then
           @x = target.x
           @y = target.y
+          @path.shift
           if @floor.get_tile(@x, @y) == @ore_last_seen_at then
             @ore_last_seen_at = nil
           end
@@ -233,6 +240,8 @@ class Ally < Character
       elsif !is_ally?(other_char) then
         attack(other_char)
         return :attack
+      else
+        return :stand
       end
     end
   end
@@ -244,15 +253,18 @@ class Ally < Character
       end
     end
     if @path != nil && @path.length > 0 then
-      target = @path.shift
+      target = @path[0]
       other_char = @floor.get_character_at(target.x, target.y)
       if other_char == nil then
         @x = target.x
         @y = target.y
+        @path.shift
         return :move
       elsif !is_ally?(other_char) then
         attack(other_char)
         return :attack
+      else
+        return :stand
       end
     end
   end
