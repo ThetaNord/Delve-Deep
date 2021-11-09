@@ -280,7 +280,11 @@ class Game
   end
 
   def render_ui
-    floor_name = "Floor " + (state.player.floor.depth).to_s
+    floor_depth = 0
+    if state.player != nil && state.player.floor != nil then
+      floor_depth = state.player.floor.depth
+    end
+    floor_name = "Floor " + floor_depth.to_s
     outputs.labels << {x: grid.right-30, y: grid.top-30, text: floor_name, size_enum: 10, alignment_enum: 2, r: 255, g: 255, b: 255, font: FONT }
     # Draw health as hearts
     for i in 0...(state.player.max_health/2).floor do
