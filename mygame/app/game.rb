@@ -85,7 +85,7 @@ class Game
       state.enemies = state.dungeon.get_enemies
       unless state.enemies.empty?
         state.phase = :move_enemies
-        #puts "Enemies: #{state.enemies.length}"
+        puts "Enemies: #{state.enemies.length}"
       else
         state.phase = :move_player
       end
