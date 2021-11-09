@@ -13,7 +13,7 @@ class Enemy < Character
     closest_enemy_at = get_closest_enemy_location
     if closest_enemy_at != nil && (closest_enemy_at != @enemy_last_seen_at || path == nil || path.length == 0) then
       @enemy_last_seen_at = closest_enemy_at
-      new_path = @floor.get_path(@x, @y, @enemy_last_seen_at.x, @enemy_last_seen_at.y)
+      new_path = @floor.get_path(@x, @y, @enemy_last_seen_at.x, @enemy_last_seen_at.y, :open, :ally)
       if new_path != nil then
         @path = new_path
       end
