@@ -79,7 +79,7 @@ class Ally < Character
 
   def check_ore
     # Check that current tile still has ore
-    if @ore_last_seen_at != nil && @floor.has_line_of_sight?(@x, @y, @ore_last_seen_at.x, @ore_last_seen_at.y) then
+    if @ore_last_seen_at != nil then
       unless ORE_TYPES.include?(@ore_last_seen_at.terrain)
         @ore_last_seen_at = nil
       end
