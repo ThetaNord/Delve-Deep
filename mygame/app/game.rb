@@ -127,6 +127,7 @@ class Game
       if x_diff != 0 || y_diff != 0 then
         if state.axes_released == true then
           move_player(x_diff, y_diff)
+          end_player_phase
         end
       elsif !state.axes_released
         state.axes_released = true
@@ -134,8 +135,8 @@ class Game
       # Check for AI mode button presses
       check_ai_clicks
       # Check for skip
-      if inputs.keyboard.space then
-        next_dungeon_phase
+      if inputs.keyboard.key_down.space then
+        end_player_phase
       end
     end
   end
@@ -218,20 +219,25 @@ class Game
           outputs.sounds << sound
         end
       end
-      health_restored = state.player.update_restore_timer
-      if health_restored && state.player.health % 2 == 1 then
-        outputs.sounds << HEALTH_RESTORATION_SOUND
-      end
       state.axes_released = false
-      state.until_goblin_wave -= 1
-      if state.until_goblin_wave == 0 then
-        state.dungeon.spawn_goblin_wave
-        state.until_goblin_wave = GOBLIN_WAVE_DELAY
-        outputs.sounds << GOBLIN_WAVE_SOUND
-      end
-      state.last_move = state.tick_count
-      next_dungeon_phase
     end
+  end
+
+  def end_player_phase
+    # Tick health restoration timer
+    health_restored = state.player.update_restore_timer
+    if health_restored && state.player.health % 2 == 1 then
+      outputs.sounds << HEALTH_RESTORATION_SOUND
+    end
+    # Check for goblin wave spawning
+    state.until_goblin_wave -= 1
+    if state.until_goblin_wave == 0 then
+      state.dungeon.spawn_goblin_wave
+      state.until_goblin_wave = GOBLIN_WAVE_DELAY
+      outputs.sounds << GOBLIN_WAVE_SOUND
+    end
+    state.last_move = state.tick_count
+    next_dungeon_phase
   end
 
   def render
