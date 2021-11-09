@@ -149,7 +149,7 @@ class Ally < Character
     end
     if action == nil then
       # Move randomly
-      super
+      action = super
     end
     puts action
     return action
