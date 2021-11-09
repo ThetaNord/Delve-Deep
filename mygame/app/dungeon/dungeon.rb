@@ -102,7 +102,7 @@ class Dungeon
     puts "Spawning goblin wave #{@wave_number}"
     cumulative = 0
     while cumulative < 1 do
-      cumulative += rand * 1.0/(@wave_number)**0.2
+      cumulative += rand * 1.0/(@wave_number)**0.3
       puts cumulative
       enemy = nil
       for en in GOBLIN_WAVE_UNITS do
@@ -121,6 +121,8 @@ class Dungeon
         puts @spawn_queue[-1]
       end
     end
+    # Reverse the queue so that goblins spawn first
+    @spawn_queue = @spawn_queue.reverse
     @wave_number += 1
   end
 
