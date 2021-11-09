@@ -176,7 +176,7 @@ class Ally < Character
         attack(other_char)
         return :attack
       else
-        return :stand
+        return :none
       end
     end
   end
@@ -203,7 +203,7 @@ class Ally < Character
         @path = nil
         return :attack
       else
-        return :stand
+        return :none
       end
     end
   end
@@ -241,7 +241,7 @@ class Ally < Character
         attack(other_char)
         return :attack
       else
-        return :stand
+        return :none
       end
     end
   end
@@ -264,7 +264,7 @@ class Ally < Character
         attack(other_char)
         return :attack
       else
-        return :stand
+        return :none
       end
     end
   end

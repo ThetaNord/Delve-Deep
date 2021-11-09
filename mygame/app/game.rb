@@ -45,7 +45,7 @@ class Game
             outputs.sounds << STAIR_SOUND
           end
           character.update_restore_timer
-          if character.floor == state.dungeon.active_floor then
+          if action != :none && character.floor == state.dungeon.active_floor then
             state.last_move = state.tick_count
           end
         end
@@ -58,7 +58,7 @@ class Game
           character = state.enemies.shift
           check_objects(character)
           action = character.move
-          if character.floor != nil && character.floor == state.dungeon.active_floor then
+          if action != :none && character.floor != nil && character.floor == state.dungeon.active_floor then
             case action
             when :hurt
               outputs.sounds << HURT_SOUND
