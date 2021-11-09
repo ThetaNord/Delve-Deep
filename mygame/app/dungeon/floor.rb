@@ -260,39 +260,48 @@ class Floor
   end
 
   def add_stairs
-    # Stairs down
+    # Create stairs up
+    @stairs_up = Stairs.new
+    @stairs_up.direction = "up"
+    # Create stairs down
     @stairs_down = Stairs.new
     @stairs_down.direction = "down"
-    stair_x = (rand * @width).floor
-    stair_y = (rand * @height).floor
-    while square_has_object(stair_x, stair_y) do
-      stair_x = (rand * @width).floor
-      stair_y = (rand * @height).floor
+    # Randomly place the stairs in the level
+    loop do
+      loop do
+        @stairs_up.x = 1 + (rand * (@width-1)).floor
+        @stairs_up.y = 1 + (rand * (@height-1)).floor
+        # Check that target square is free
+        if !square_has_object(@stairs_up.x, @stairs_up.y) then
+          break
+        end
+      end
+      loop do
+        @stairs_down.x = 1 + (rand * (@width-1)).floor
+        @stairs_down.y = 1 + (rand * (@height-1)).floor
+        # Check that target square is free and that the stairs are far enough apart
+        if !square_has_object(@stairs_down.x, @stairs_down.y) && ((@stairs_down.x - @stairs_up.x).abs >= @width.div(3) && (@stairs_down.y - @stairs_up.y).abs >= @height.div(3)) then
+          break
+        end
+      end
+      # Make sure that a path can be mined between the stairs
+      if get_path(@stairs_down.x, @stairs_down.y, @stairs_up.x, @stairs_up.y, :mineable) != nil then
+        break
+      end
     end
-    tile = get_tile(stair_x, stair_y)
+    # Clear target tiles if necessary
+    tile = get_tile(@stairs_down.x, @stairs_down.y)
     if tile.terrain != :empty then
       tile.set_terrain(:empty)
     end
-    @stairs_down.x = stair_x
-    @stairs_down.y = stair_y
-    @objects << stairs_down
-    # Stairs up
-    @stairs_up = Stairs.new
-    @stairs_up.direction = "up"
-    stair_x = (rand * @width).floor
-    stair_y = (rand * @height).floor
-    # Check that the square is free and far enough from the stairs leading down
-    while square_has_object(stair_x, stair_y) || ((@stairs_down.x - stair_x).abs <= 5 && (@stairs_down.y - stair_y).abs <= 5) do
-      stair_x = (rand * @width).floor
-      stair_y = (rand * @height).floor
-    end
-    tile = get_tile(stair_x, stair_y)
-    if tile.terrain != "empty" then
+    tile = get_tile(@stairs_up.x, @stairs_up.y)
+    if tile.terrain != :empty then
       tile.set_terrain(:empty)
     end
-    @stairs_up.x = stair_x
-    @stairs_up.y = stair_y
+    # Add the stairs to the level's object list
+    @objects << @stairs_down
     @objects << @stairs_up
+    puts "Stairs up generate at: (" + @stairs_up.x.to_s + ", " + @stairs_up.y.to_s + ")"
   end
 
   def add_ores
