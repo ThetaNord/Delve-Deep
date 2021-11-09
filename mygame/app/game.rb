@@ -62,8 +62,8 @@ class Game
             case action
             when :hurt
               outputs.sounds << HURT_SOUND
-#            when :move
-#              outputs.sounds << MOVE_SOUND
+            when :move
+              outputs.sounds << MOVE_SOUND
             end
             state.last_move = state.tick_count
           end
