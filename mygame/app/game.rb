@@ -23,17 +23,19 @@ class Game
             character.check_all
           end
           action = character.move
-          case action
-          when :attack
-            outputs.sounds << ATTACK_SOUND
-          when :move
-            outputs.sounds << MOVE_SOUND
-          when :dirt
-            outputs.sounds << TERRAIN_DIG_SOUNDS[:dirt]
-          when :stone
-            outputs.sounds << TERRAIN_DIG_SOUNDS[:stone]
-          when :gold
-            outputs.sounds << TERRAIN_DIG_SOUNDS[:gold]
+          if character.floor == state.dungeon.active_floor then
+            case action
+              when :attack
+                outputs.sounds << ATTACK_SOUND
+              when :move
+                outputs.sounds << MOVE_SOUND
+              when :dirt
+                outputs.sounds << TERRAIN_DIG_SOUNDS[:dirt]
+              when :stone
+                outputs.sounds << TERRAIN_DIG_SOUNDS[:stone]
+              when :gold
+                outputs.sounds << TERRAIN_DIG_SOUNDS[:gold]
+            end
           end
           interaction = check_objects(character)
           case interaction
