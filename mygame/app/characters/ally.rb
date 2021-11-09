@@ -16,7 +16,7 @@ class Ally < Character
     @min_damage = 1 + (2*rand).round
     @max_damage = 3 + (3*rand).round
     @sprite_index = 1 + (2*rand).round
-    @vision = 3 + (3*rand).round
+    @vision = 2 + (3*rand).round
     @mining_speed = 5 + (10*rand).round
     @ai_state = :follow
   end
