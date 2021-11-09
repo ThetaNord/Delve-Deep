@@ -40,6 +40,10 @@ class Floor
 
   def get_neighbours(tile)
     neighbours = Array.new
+    if tile == nil then
+      puts "Can't get neighbours for a nil tile"
+      return neighbours
+    end
     coords = [[0, -1], [-1, 0], [1, 0], [0, 1]]
     coords.each do |coord|
       new_tile = get_tile(tile.x+coord[0], tile.y+coord[1])
@@ -211,7 +215,6 @@ class Floor
         i += 2*step
       end
     end
-    #puts float_map
     # Convert the float map to desired size tile map
     @map = Array.new
     x_ratio = (x_size-1)/(@width-1.0)
