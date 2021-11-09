@@ -55,7 +55,7 @@ class Floor
   end
 
   def get_path(x0, y0, x1, y1, path_type = :open, allowed_alignment = :any)
-    puts "Looking for path from (" + x0.to_s + ", " + y0.to_s + ") to (" + x1.to_s + ", " + y1.to_s + ")"
+    #puts "Looking for path from (" + x0.to_s + ", " + y0.to_s + ") to (" + x1.to_s + ", " + y1.to_s + ")"
     start = get_tile(x0, y0)
     finish = get_tile(x1, y1)
     path = nil
@@ -93,7 +93,7 @@ class Floor
           visiting = came_from[visiting]
         end
         path = path.reverse
-        puts "Path compiled! Length: #{path.length}"
+        #puts "Path compiled! Length: #{path.length}"
       end
     end
     return path
@@ -311,11 +311,9 @@ class Floor
     # Add the stairs to the level's object list
     @objects << @stairs_down
     @objects << @stairs_up
-    puts "Stairs up generate at: (" + @stairs_up.x.to_s + ", " + @stairs_up.y.to_s + ")"
   end
 
   def add_ores
-    puts ORE_VALID_TERRAINS.include?("stone")
     for tile in get_tiles do
       if ORE_VALID_TERRAINS.include?(tile.terrain) && !tile.has_ore? then
         for ore in ORE_TYPES do

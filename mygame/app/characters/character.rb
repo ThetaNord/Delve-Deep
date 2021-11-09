@@ -36,7 +36,7 @@ class Character
     if health <= 0
       @floor.remove_character(self)
     end
-    puts "Damage: " + dmg.to_s + ", current health: " + @health.to_s
+    #puts "Damage: " + dmg.to_s + ", current health: " + @health.to_s
   end
 
   def move_to(x, y)

@@ -85,7 +85,7 @@ class Game
       state.enemies = state.dungeon.get_enemies
       unless state.enemies.empty?
         state.phase = :move_enemies
-        puts "Enemies: #{state.enemies.length}"
+        #puts "Enemies: #{state.enemies.length}"
       else
         state.phase = :move_player
       end
@@ -191,7 +191,7 @@ class Game
             # Check for gold
             if object.respond_to?("get_ore") && object.get_ore == :gold then
               state.score += 1
-              puts "Score: " + state.score.to_s
+              #puts "Score: " + state.score.to_s
               state.floor.objects.delete(object)
               outputs.sounds << GOLD_PICKUP_SOUND
             end

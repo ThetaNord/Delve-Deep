@@ -69,8 +69,8 @@ class Dungeon
     floor_size = 10 + @floor_count.div(3)
     floor.generate_floor_map(floor_size, floor_size)
     @floors << floor
-    puts "Active floors: " + @floors.length.to_s
-    puts "Current depth: " + (@floor_count).to_s
+    #puts "Active floors: " + @floors.length.to_s
+    #puts "Current depth: " + (@floor_count).to_s
     return floor
   end
 
@@ -131,9 +131,9 @@ class Dungeon
   def spawn_next_from_queue
     unless @spawn_queue.empty?
       entry = @spawn_queue[0]
-      puts entry
+      #puts entry
       floor = entry[:floor]
-      puts "Floor: #{floor}"
+      #puts "Floor: #{floor}"
       x = floor.stairs_up.x
       y = floor.stairs_up.y
       character = floor.get_character_at(x, y)

@@ -140,16 +140,16 @@ class Ally < Character
     if @allied then
       case @ai_state
       when :follow
-        puts "Following"
+        #puts "Following"
         action = follow
       when :assault
-        puts "Assaulting"
+        #puts "Assaulting"
         action = assault
       when :mine
-        puts "Mining"
+        #puts "Mining"
         action = mine
       when :escape
-        puts "Escaping"
+        #puts "Escaping"
         action = escape
       end
     end
@@ -157,7 +157,7 @@ class Ally < Character
       # Move randomly
       action = super
     end
-    puts action
+    #puts action
     return action
   end
 
