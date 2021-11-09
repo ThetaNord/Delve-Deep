@@ -102,7 +102,13 @@ class Ally < Character
   end
 
   def check_ore_item
-    # TODO: check that the current tile still has ore item
+    # Check that the current tile still has ore item
+    if @ore_item_last_seen_at != nil && @floor.has_line_of_sight?(@x, @y, @ore_item_last_seen_at.x, @ore_item_last_seen_at.y) then
+      item = @floor.get_object(@ore_item_last_seen_at.x, @ore_item_last_seen_at.y)
+      if item == nil then
+        @ore_item_last_seen_at = nil
+      end
+    end
     objects = @floor.get_objects_by_distance(@x, @y, @vision)
     min_distance = 999
     closest_ore_item = nil
