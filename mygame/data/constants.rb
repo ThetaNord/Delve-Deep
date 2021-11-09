@@ -1,3 +1,5 @@
+VERSION_NUMBER = "1.0"
+
 CHARACTER_SPRITES_PATH = 'sprites/characters.png'
 TILE_SPRITES_PATH = 'sprites/tiles.png'
 OBJECT_SPRITES_PATH = 'sprites/objects.png'

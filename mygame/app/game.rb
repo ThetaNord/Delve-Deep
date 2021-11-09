@@ -262,7 +262,7 @@ class Game
     outputs.labels << { x: 640, y: 670, text: 'Delve Deep', size_enum: 50, alignment_enum: 1, r: 255, g: 255, b: 255, font: FONT }
     outputs.sprites << get_character_sprite(0, 20, @x_mid, @y_mid)
     outputs.labels << [640, 150, 'Press Enter to start a new game', 10, 1, 255, 255, 255, 255, FONT]
-    outputs.labels << { x: 1270, y: 35, text: 'Version 0.9b', size_enum: 5, alignment_enum: 2, r: 255, g: 255, b: 255, font: FONT }
+    outputs.labels << { x: 1270, y: 35, text: "Version #{VERSION_NUMBER}", size_enum: 5, alignment_enum: 2, r: 255, g: 255, b: 255, font: FONT }
   end
 
   def render_dungeon

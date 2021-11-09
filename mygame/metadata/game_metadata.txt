@@ -2,4 +2,4 @@ devid=thetanord
 devtitle=Tuure Saloheimo
 gameid=delve-deep
 gametitle=Delve Deep
-version=0.9
+version=1.0
