@@ -158,7 +158,7 @@ class Ally < Character
   def follow
     if @path == nil || @path.length == 0 || @path[-1] != @player_last_seen_at then
       if @player_last_seen_at != nil then
-        @path = @floor.get_path(@x, @y, @player_last_seen_at.x, @player_last_seen_at.y)
+        @path = @floor.get_path(@x, @y, @player_last_seen_at.x, @player_last_seen_at.y, :open, :any)
       end
     end
     if @path != nil && @path.length > 0 then
@@ -184,7 +184,7 @@ class Ally < Character
   def assault
     if @path == nil || @path.length == 0 || @path[-1] != @enemy_last_seen_at then
       if @enemy_last_seen_at != nil then
-        @path = @floor.get_path(@x, @y, @enemy_last_seen_at.x, @enemy_last_seen_at.y)
+        @path = @floor.get_path(@x, @y, @enemy_last_seen_at.x, @enemy_last_seen_at.y, :open, :enemy)
       end
     end
     if @path != nil && @path.length > 0 then
@@ -211,9 +211,9 @@ class Ally < Character
   def mine
     if @path == nil || @path.length == 0 then
       if @ore_item_last_seen_at != nil then
-        @path = @floor.get_path(@x, @y, @ore_item_last_seen_at.x, @ore_item_last_seen_at.y, :mineable)
+        @path = @floor.get_path(@x, @y, @ore_item_last_seen_at.x, @ore_item_last_seen_at.y, :mineable, :enemy)
       elsif @ore_last_seen_at != nil then
-        @path = @floor.get_path(@x, @y, @ore_last_seen_at.x, @ore_last_seen_at.y, :mineable)
+        @path = @floor.get_path(@x, @y, @ore_last_seen_at.x, @ore_last_seen_at.y, :mineable, :enemy)
       end
     end
     if @path != nil && @path.length > 0 then
@@ -249,7 +249,7 @@ class Ally < Character
   def escape
     if @path == nil || @path.length == 0 || @path[-1] != @stairs_seen_at then
       if @stairs_seen_at != nil then
-        @path = @floor.get_path(@x, @y, @stairs_seen_at.x, @stairs_seen_at.y)
+        @path = @floor.get_path(@x, @y, @stairs_seen_at.x, @stairs_seen_at.y, :open, :any)
       end
     end
     if @path != nil && @path.length > 0 then

@@ -54,7 +54,7 @@ class Floor
     return neighbours
   end
 
-  def get_path(x0, y0, x1, y1, path_type = :open)
+  def get_path(x0, y0, x1, y1, path_type = :open, allowed_alignment = :any)
     puts "Looking for path from (" + x0.to_s + ", " + y0.to_s + ") to (" + x1.to_s + ", " + y1.to_s + ")"
     start = get_tile(x0, y0)
     finish = get_tile(x1, y1)
@@ -67,13 +67,21 @@ class Floor
       while !frontier.empty? && visiting != finish do
         visiting = frontier.shift
         get_neighbours(visiting).each do |neighbour|
-          if !visited.has_key?(neighbour) && ((path_type == :open && neighbour.terrain == :empty) || (path_type == :mineable && neighbour.terrain != :bedrock)) then
-            frontier << neighbour
-            visited[neighbour] = true
-            came_from[neighbour] = visiting
-            if neighbour == finish then
-              visiting = neighbour
-              break
+          # Check that tile has not already been visited
+          if !visited.has_key?(neighbour) then
+            # Check that the terrain is applicable
+            if ((path_type == :open && neighbour.terrain == :empty) || (path_type == :mineable && neighbour.terrain != :bedrock)) then
+              # Check that the tile has only characters of allowed alignment
+              neighbour_character = get_character_at(neighbour.x, neighbour.y)
+              if allowed_alignment == :any || neighbour_character == nil || neighbour_character.alignment == allowed_alignment then
+                frontier << neighbour
+                visited[neighbour] = true
+                came_from[neighbour] = visiting
+                if neighbour == finish then
+                  visiting = neighbour
+                  break
+                end
+              end
             end
           end
         end
@@ -85,7 +93,6 @@ class Floor
           visiting = came_from[visiting]
         end
         path = path.reverse
-        #path.shift
         puts "Path compiled! Length: #{path.length}"
       end
     end
