@@ -30,17 +30,17 @@ class Ally < Character
   end
 
   def check_all
-    puts "Running ally checks"
+    #puts "Running ally checks"
     check_player
-    puts "Player last seen at: #{@player_last_seen_at}"
+    #puts "Player last seen at: #{@player_last_seen_at}"
     check_stairs
-    puts "Stairs seen at: #{@stairs_seen_at}"
+    #puts "Stairs seen at: #{@stairs_seen_at}"
     check_enemies
-    puts "Enemy last seen at: #{@enemy_last_seen_at}"
+    #puts "Enemy last seen at: #{@enemy_last_seen_at}"
     check_ore
-    puts "Ore last seen at: #{@ore_last_seen_at}"
+    #puts "Ore last seen at: #{@ore_last_seen_at}"
     check_ore_item
-    puts "Ore item last seen at: #{@ore_item_last_seen_at}"
+    #puts "Ore item last seen at: #{@ore_item_last_seen_at}"
   end
 
   def check_stairs
