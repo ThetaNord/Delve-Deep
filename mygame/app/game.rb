@@ -109,6 +109,7 @@ class Game
       # Check for game over
       if state.player.health <= 0 then
         @screen = "gameover"
+        outputs.sounds << GAME_OVER_SOUND
         state.phase = :menu
         return
       end
