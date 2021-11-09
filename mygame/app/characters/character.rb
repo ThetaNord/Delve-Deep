@@ -19,6 +19,7 @@ class Character
 
   def clear_registers
     @enemy_last_seen_at = nil
+    @path = nil
   end
 
   def set_sprite_index(idx)
@@ -38,6 +39,15 @@ class Character
     puts "Damage: " + dmg.to_s + ", current health: " + @health.to_s
   end
 
+  def move_to(x, y)
+    if @floor.is_valid_coordinate?(x, y) then
+      @x = x
+      @y = y
+    else
+      puts "Invalid coordinate!"
+    end
+  end
+
   def move
     target = nil
     neighbours = @floor.get_neighbours(@floor.get_tile(@x, @y))
@@ -53,9 +63,11 @@ class Character
     if target != nil then
       other_char = @floor.get_character_at(target.x, target.y)
       if other_char == nil then
-        @x = target.x
-        @y = target.y
-        return :move
+        if move_to(target.x, target.y)
+          return :move
+        else
+          return :none
+        end
       elsif !is_ally?(other_char) then
         attack(other_char)
       end
